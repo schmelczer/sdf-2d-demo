@@ -1,0 +1,35 @@
+html,
+body,
+canvas#main {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  position: relative;
+  margin: 0;
+
+  #overlay {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.6em;
+    margin: 0.75em 1em;
+    position: absolute;
+    right: 0;
+
+    $outline-width: 0.5px;
+    text-shadow: -$outline-width -$outline-width 0 #000,
+      $outline-width -$outline-width 0 #000, -$outline-width $outline-width 0 #000,
+      $outline-width $outline-width 0 #000;
+
+    color: white;
+    white-space: pre;
+
+    @media (max-width: 800px) {
+      font-size: 0.55em;
+    }
+  }
+
+  canvas#main {
+    background-color: hotpink;
+  }
+}
