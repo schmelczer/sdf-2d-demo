@@ -37,8 +37,12 @@ const handleScene = async (scene: Scene) => {
   const renderer = compile(
     canvas,
     scene.descriptors,
-    [vec3.fromValues(0.4, 0.35, 0.6), vec3.fromValues(0, 1, 0), vec3.fromValues(1, 1, 0)],
-    { tileMultiplier: 8, enableStopwatch: false }
+    [vec3.fromValues(0.4, 1, 0.6), vec3.fromValues(1, 1, 0), vec3.fromValues(0.3, 1, 1)],
+    {
+      tileMultiplier: 10,
+      enableStopwatch: false,
+      shaderMacros: { softShadowTraceCount: '128', hardShadowTraceCount: '48' },
+    }
   );
 
   let triggerIsOver: () => void;
