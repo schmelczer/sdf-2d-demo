@@ -23,10 +23,6 @@ body {
 
     color: white;
     white-space: pre;
-
-    @media (max-width: 800px) {
-      font-size: 0.55em;
-    }
   }
 
   canvas#main {

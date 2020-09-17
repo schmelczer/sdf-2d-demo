@@ -14,7 +14,7 @@ module.exports = {
   watchOptions: {
     ignored: /node_modules/,
   },
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   devServer: {
     host: '0.0.0.0',
     disableHostCheck: true,
@@ -72,22 +72,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(glsl)$/,
-        use: {
-          loader: 'raw-loader',
-        },
-      },
-      {
-        test: /\.ico$/i,
-        use: {
-          loader: 'file-loader',
-          query: {
-            outputPath: '/',
-            name: '[name].[ext]',
-          },
-        },
-      },
-      {
         test: /\.scss$/i,
         use: [
           MiniCssExtractPlugin.loader,
@@ -109,6 +93,11 @@ module.exports = {
         ],
       },
       {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
+      {
         test: /\.ts$/,
         use: {
           loader: 'ts-loader',
@@ -118,7 +107,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.ts', '.js', '.glsl'],
+    extensions: ['.ts', '.js'],
   },
   output: {
     filename: '[name].[contenthash].js',
