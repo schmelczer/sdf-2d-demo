@@ -5,11 +5,20 @@ import { RainScene } from './scenes/rain/rain-scene';
 import { Scene } from './scenes/scene';
 import { TunnelScene } from './scenes/tunnel-scene';
 
+const scenes = [RainScene, TunnelScene];
+const sceneIntervalInSeconds = 8;
+
 glMatrix.setMatrixArrayType(Array);
 
 const deltaTimeCalculator = new DeltaTimeCalculator();
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+const info = document.querySelector('#info');
+const button = document.querySelector('#remove-clutter');
 const overlay = document.querySelector('#overlay') as HTMLDivElement;
+
+button.addEventListener('click', () =>
+  [info, button, overlay].forEach((e) => e.remove())
+);
 
 const handleScene = async (SceneConstructor: new () => Scene) => {
   const scene = new SceneConstructor();
@@ -24,7 +33,7 @@ const handleScene = async (SceneConstructor: new () => Scene) => {
 
     scene.drawNextFrame(currentTime, deltaTime);
 
-    if ((timeSinceStart += deltaTime) > 8 * 1000) {
+    if ((timeSinceStart += deltaTime) > sceneIntervalInSeconds * 1000) {
       triggerIsOver();
     } else {
       requestAnimationFrame(handleFrame);
@@ -39,8 +48,6 @@ const handleScene = async (SceneConstructor: new () => Scene) => {
 
 const main = async () => {
   try {
-    const scenes = [RainScene, TunnelScene];
-
     let i = 0;
     for (;;) {
       await handleScene(scenes[i++ % scenes.length]);
