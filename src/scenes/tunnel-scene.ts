@@ -1,5 +1,8 @@
 import { vec2, vec3 } from 'gl-matrix';
-import { CircleLight, compile, Renderer, Tunnel } from 'sdf-2d';
+import { CircleLight, compile, InvertedTunnel, Renderer } from 'sdf-2d';
+import { clamp } from '../helper/clamp';
+import { last } from '../helper/last';
+import { Random } from '../helper/random';
 import { Scene } from './scene';
 
 export class TunnelScene implements Scene {
@@ -7,7 +10,40 @@ export class TunnelScene implements Scene {
   private canvas: HTMLCanvasElement;
   private overlay: HTMLDivElement;
 
-  public constructor() {}
+  private tunnels: Array<InvertedTunnel> = [];
+  private lights: Array<CircleLight> = [];
+
+  private generateTunnel() {
+    const canvasSize = this.canvas.getBoundingClientRect();
+
+    let previousEnd = vec2.fromValues(0, 200);
+    let previousRadius = 75;
+
+    if (this.tunnels.length > 0) {
+      previousEnd = last(this.tunnels).to;
+      previousRadius = last(this.tunnels).toRadius;
+    }
+
+    let height = previousEnd.y + Random.getRandomInRange(-400, 400);
+    height = clamp(height, 200, canvasSize.height - 200);
+
+    const currentEnd = vec2.fromValues(this.tunnels.length * 200, height);
+    const currentToRadius = Random.getRandom() * 100 + 50;
+
+    this.tunnels.push(
+      new InvertedTunnel(previousEnd, currentEnd, previousRadius, currentToRadius)
+    );
+
+    if (this.tunnels.length % 5 == 0) {
+      this.lights.push(
+        new CircleLight(
+          previousEnd,
+          [Random.getRandom(), Random.getRandom(), Random.getRandom()],
+          0.25
+        )
+      );
+    }
+  }
 
   public async initialize(
     canvas: HTMLCanvasElement,
@@ -19,12 +55,12 @@ export class TunnelScene implements Scene {
       canvas,
       [
         {
-          ...Tunnel.descriptor,
+          ...InvertedTunnel.descriptor,
           shaderCombinationSteps: [0, 1, 2, 4, 8, 12],
         },
         {
           ...CircleLight.descriptor,
-          shaderCombinationSteps: [2],
+          shaderCombinationSteps: [1, 2, 3, 4, 5, 6, 7],
         },
       ],
       [
@@ -34,18 +70,32 @@ export class TunnelScene implements Scene {
       ],
       {
         enableStopwatch: false,
-        softShadowTraceCount: '128',
-        hardShadowTraceCount: '48',
+        softShadowTraceCount: '64',
+        hardShadowTraceCount: '32',
       }
     );
+
+    this.renderer.setRuntimeSettings({
+      isWorldInverted: true,
+      ambientLight: vec3.fromValues(0.45, 0.25, 0.45),
+    });
+
+    for (let i = 0; i < 100; i++) {
+      this.generateTunnel();
+    }
   }
 
+  private deltaSinceStart = 0;
   public drawNextFrame(
     currentTime: DOMHighResTimeStamp,
     deltaTime: DOMHighResTimeStamp
   ): void {
     const { width, height } = this.canvas.getBoundingClientRect();
-    this.renderer.setViewArea(vec2.fromValues(0, height), vec2.fromValues(width, height));
+    this.deltaSinceStart += deltaTime;
+    this.renderer.setViewArea(
+      vec2.fromValues(this.deltaSinceStart / 2, height),
+      vec2.fromValues(width, height)
+    );
     this.renderer.autoscaleQuality(deltaTime);
 
     this.overlay.innerText = JSON.stringify(
@@ -54,11 +104,7 @@ export class TunnelScene implements Scene {
       '  '
     );
 
-    const viewAreaSize = this.renderer.viewAreaSize;
-
-    [
-      new Tunnel(vec2.fromValues(200, 200), vec2.fromValues(600, 600), 30, 200),
-    ].forEach((d) => this.renderer.addDrawable(d));
+    [...this.tunnels, ...this.lights].forEach((d) => this.renderer.addDrawable(d));
 
     this.renderer.renderDrawables();
   }

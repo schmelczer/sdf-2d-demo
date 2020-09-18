@@ -24,7 +24,7 @@ const handleScene = async (SceneConstructor: new () => Scene) => {
 
     scene.drawNextFrame(currentTime, deltaTime);
 
-    if ((timeSinceStart += deltaTime) > 2 * 1000) {
+    if ((timeSinceStart += deltaTime) > 8 * 1000) {
       triggerIsOver();
     } else {
       requestAnimationFrame(handleFrame);
@@ -39,7 +39,7 @@ const handleScene = async (SceneConstructor: new () => Scene) => {
 
 const main = async () => {
   try {
-    const scenes = [TunnelScene, RainScene];
+    const scenes = [RainScene, TunnelScene];
 
     let i = 0;
     for (;;) {

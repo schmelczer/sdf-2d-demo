@@ -21,7 +21,7 @@ export class RainScene implements Scene {
   private overlay: HTMLDivElement;
 
   public constructor() {
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 40; i++) {
       this.droplets.push(new Droplet());
     }
   }
@@ -37,7 +37,7 @@ export class RainScene implements Scene {
       [
         {
           ...Tunnel.descriptor,
-          shaderCombinationSteps: [0, 1, 2, 4, 8, 12],
+          shaderCombinationSteps: [0, 1, 2, 4, 8, 12, 16, 24],
         },
         {
           ...CircleLight.descriptor,
@@ -51,10 +51,15 @@ export class RainScene implements Scene {
       ],
       {
         enableStopwatch: false,
-        softShadowTraceCount: '128',
-        hardShadowTraceCount: '48',
+        softShadowTraceCount: '64',
+        hardShadowTraceCount: '32',
       }
     );
+
+    this.renderer.setRuntimeSettings({
+      ambientLight: vec3.fromValues(0.45, 0.25, 0.45),
+      tileMultiplier: 10,
+    });
   }
 
   public drawNextFrame(
