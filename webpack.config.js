@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -10,11 +9,25 @@ const Sass = require('sass');
 const isProduction = process.env.NODE_ENV == 'production';
 const isDevelopment = !isProduction;
 
+const PATHS = {
+  entryPoint: path.resolve(__dirname, 'src/index.ts'),
+  bundles: path.resolve(__dirname, 'dist'),
+};
+
 module.exports = {
+  entry: {
+    index: PATHS.entryPoint,
+  },
+  target: 'web',
+  output: {
+    filename: '[name].[contenthash].js',
+    path: PATHS.bundles,
+  },
+  devtool: isDevelopment ? 'source-map' : '',
   watchOptions: {
+    aggregateTimeout: 600,
     ignored: /node_modules/,
   },
-  devtool: 'source-map',
   devServer: {
     host: '0.0.0.0',
     disableHostCheck: true,
@@ -23,30 +36,13 @@ module.exports = {
     minimize: true,
     minimizer: [
       new TerserJSPlugin({
-        sourceMap: isDevelopment,
-        cache: true,
-        test: /\.ts$/i,
-        terserOptions: {
-          ecma: 5,
-          warnings: true,
-          parse: {},
-          compress: { defaults: true },
-          mangle: true,
-          module: false,
-          output: null,
-          toplevel: true,
-          nameCache: null,
-          ie8: false,
-          keep_classnames: false,
-          keep_fnames: false,
-          safari10: false,
-        },
+        sourceMap: true,
+        test: /\.js$/i,
       }),
       new OptimizeCSSAssetsPlugin({}),
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       xhtml: true,
       template: './src/index.html',
@@ -66,9 +62,6 @@ module.exports = {
       chunkFilename: '[id].[contenthash].css',
     }),
   ],
-  entry: {
-    index: './src/index.ts',
-  },
   module: {
     rules: [
       {
@@ -93,24 +86,20 @@ module.exports = {
         ],
       },
       {
-        test: /\.js$/,
-        enforce: 'pre',
-        use: ['source-map-loader'],
-      },
-      {
         test: /\.ts$/,
         use: {
           loader: 'ts-loader',
         },
         exclude: /node_modules/,
       },
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
     ],
   },
   resolve: {
     extensions: ['.ts', '.js'],
-  },
-  output: {
-    filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, 'dist'),
   },
 };
