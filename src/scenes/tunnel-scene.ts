@@ -69,9 +69,8 @@ export class TunnelScene implements Scene {
         vec3.fromValues(0.3, 1, 1),
       ],
       {
-        enableStopwatch: false,
         softShadowTraceCount: '64',
-        hardShadowTraceCount: '32',
+        hardShadowTraceCount: '16',
       }
     );
 
@@ -96,6 +95,7 @@ export class TunnelScene implements Scene {
       vec2.fromValues(this.deltaSinceStart / 2, height),
       vec2.fromValues(width, height)
     );
+
     this.renderer.autoscaleQuality(deltaTime);
 
     this.overlay.innerText = JSON.stringify(

@@ -50,9 +50,8 @@ export class RainScene implements Scene {
         vec3.fromValues(0.3, 1, 1),
       ],
       {
-        enableStopwatch: false,
-        softShadowTraceCount: '64',
-        hardShadowTraceCount: '32',
+        softShadowTraceCount: '32',
+        hardShadowTraceCount: '16',
       }
     );
 
