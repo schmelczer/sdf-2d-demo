@@ -2,24 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Test</title>
+    <title>SDF-2D demo</title>
+    <meta
+      name="description"
+      content="Some simple demos to showcase the possibilities of this library."
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
-    <noscript>
-      <h1>Javascript is required for this website.</h1>
-    </noscript>
+    <noscript>Javascript is required for this website.</noscript>
 
-    <div id="info">
-      <h1>
-        <a href="https://github.com/schmelczerandras/sdf-2d" target="_BLANK">SDF-2D</a>
-      </h1>
-    </div>
+    <button id="info">
+      <a href="https://github.com/schmelczerandras/sdf-2d" target="_BLANK">
+        SDF-2D<img src="static/logo-white.svg" alt="logo" />
+      </a>
+    </button>
 
     <button id="remove-clutter">Hide text</button>
 
     <div id="overlay"></div>
 
     <canvas id="main"></canvas>
+
+    <div id="errors-container">
+      <div id="errors">
+        <h1>Error</h1>
+        <p id="error-text"></p>
+      </div>
+    </div>
   </body>
 </html>

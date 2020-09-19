@@ -5,7 +5,7 @@ import { RainScene } from './scenes/rain/rain-scene';
 import { Scene } from './scenes/scene';
 import { TunnelScene } from './scenes/tunnel-scene';
 
-const scenes = [RainScene, TunnelScene];
+const scenes = [TunnelScene, RainScene];
 const sceneIntervalInSeconds = 8;
 
 glMatrix.setMatrixArrayType(Array);
@@ -13,6 +13,8 @@ glMatrix.setMatrixArrayType(Array);
 const deltaTimeCalculator = new DeltaTimeCalculator();
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
 const info = document.querySelector('#info');
+const errorText = document.querySelector('#error-text') as HTMLParamElement;
+const errorsContainer = document.querySelector('#errors-container') as HTMLDivElement;
 const button = document.querySelector('#remove-clutter');
 const overlay = document.querySelector('#overlay') as HTMLDivElement;
 
@@ -54,7 +56,8 @@ const main = async () => {
     }
   } catch (e) {
     console.error(e);
-    alert(e);
+    errorText.innerText = e;
+    errorsContainer.style.display = 'flex';
   }
 };
 

@@ -24,11 +24,16 @@ export class TunnelScene implements Scene {
       previousRadius = last(this.tunnels).toRadius;
     }
 
-    let height = previousEnd.y + Random.getRandomInRange(-400, 400);
+    let height =
+      previousEnd.y +
+      Random.getRandomInRange(-canvasSize.height / 3, canvasSize.height / 3);
     height = clamp(height, 200, canvasSize.height - 200);
 
-    const currentEnd = vec2.fromValues(this.tunnels.length * 200, height);
-    const currentToRadius = Random.getRandom() * 100 + 50;
+    const currentEnd = vec2.fromValues(
+      this.tunnels.length * (canvasSize.width / 6),
+      height
+    );
+    const currentToRadius = (Random.getRandom() * canvasSize.height) / 6 + 50;
 
     this.tunnels.push(
       new InvertedTunnel(previousEnd, currentEnd, previousRadius, currentToRadius)
@@ -38,8 +43,12 @@ export class TunnelScene implements Scene {
       this.lights.push(
         new CircleLight(
           previousEnd,
-          [Random.getRandom(), Random.getRandom(), Random.getRandom()],
-          0.25
+          vec3.normalize(vec3.create(), [
+            Random.getRandom(),
+            Random.getRandom(),
+            Random.getRandom(),
+          ]),
+          0.35
         )
       );
     }
@@ -63,23 +72,16 @@ export class TunnelScene implements Scene {
           shaderCombinationSteps: [1, 2, 3, 4, 5, 6, 7],
         },
       ],
-      [
-        vec3.fromValues(0.4, 1, 0.6),
-        vec3.fromValues(1, 1, 0),
-        vec3.fromValues(0.3, 1, 1),
-      ],
-      {
-        softShadowTraceCount: '64',
-        hardShadowTraceCount: '16',
-      }
+      [vec3.fromValues(0.4, 1, 0.6), vec3.fromValues(1, 1, 0), vec3.fromValues(0.3, 1, 1)]
     );
 
     this.renderer.setRuntimeSettings({
       isWorldInverted: true,
-      ambientLight: vec3.fromValues(0.45, 0.25, 0.45),
+      ambientLight: vec3.fromValues(0.35, 0.1, 0.45),
+      shadowLength: 550,
     });
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 200; i++) {
       this.generateTunnel();
     }
   }
@@ -91,20 +93,26 @@ export class TunnelScene implements Scene {
   ): void {
     const { width, height } = this.canvas.getBoundingClientRect();
     this.deltaSinceStart += deltaTime;
+    const startX = this.deltaSinceStart / 3;
+    const endX = startX + width;
     this.renderer.setViewArea(
-      vec2.fromValues(this.deltaSinceStart / 2, height),
+      vec2.fromValues(startX, height),
       vec2.fromValues(width, height)
     );
 
     this.renderer.autoscaleQuality(deltaTime);
-
     this.overlay.innerText = JSON.stringify(
       this.renderer.insights,
       (_, v) => (v.toFixed ? Number(v.toFixed(2)) : v),
       '  '
     );
 
-    [...this.tunnels, ...this.lights].forEach((d) => this.renderer.addDrawable(d));
+    [
+      ...this.tunnels.filter(
+        (t) => startX < t.to.x + t.toRadius && t.from.x - t.fromRadius <= endX
+      ),
+      ...this.lights,
+    ].forEach((d) => this.renderer.addDrawable(d));
 
     this.renderer.renderDrawables();
   }

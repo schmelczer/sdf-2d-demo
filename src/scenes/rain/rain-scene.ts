@@ -44,15 +44,7 @@ export class RainScene implements Scene {
           shaderCombinationSteps: [2],
         },
       ],
-      [
-        vec3.fromValues(0.4, 1, 0.6),
-        vec3.fromValues(1, 1, 0),
-        vec3.fromValues(0.3, 1, 1),
-      ],
-      {
-        softShadowTraceCount: '32',
-        hardShadowTraceCount: '16',
-      }
+      [vec3.fromValues(0.4, 1, 0.6), vec3.fromValues(1, 1, 0), vec3.fromValues(0.3, 1, 1)]
     );
 
     this.renderer.setRuntimeSettings({

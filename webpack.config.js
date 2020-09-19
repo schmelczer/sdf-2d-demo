@@ -93,6 +93,14 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
+        test: /\.svg$/,
+        loader: 'svg-url-loader',
+        options: {
+          limit: 10 * 1024,
+          noquotes: true,
+        },
+      },
+      {
         test: /\.js$/,
         enforce: 'pre',
         use: ['source-map-loader'],
