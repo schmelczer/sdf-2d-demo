@@ -2,18 +2,18 @@
   <defs>
     <g id="ray-a">
       <rect x="18" y="-3" height="6" rx="3">
-        <animate attributeName="width" values="20;25;20" dur="3s" repeatCount="indefinite" />
+        <animate attributeName="width" values="20;25;20" dur="4s" repeatCount="indefinite" />
       </rect>
       <circle cy="0" r="3">
-        <animate attributeName="cx" values="45;40;45" dur="3s" repeatCount="indefinite" />
+        <animate attributeName="cx" values="47;40;47" dur="4s" repeatCount="indefinite" />
       </circle>
     </g>
     <g id="ray-b">
       <rect x="18" y="-3" height="6" rx="3">
-        <animate attributeName="width" values="25;20;25" dur="3s" repeatCount="indefinite" />
+        <animate attributeName="width" values="25;20;25" dur="4s" repeatCount="indefinite" />
       </rect>
       <circle cy="0" r="3">
-        <animate attributeName="cx" values="40;45;40" dur="3s" repeatCount="indefinite" />
+        <animate attributeName="cx" values="40;47;40" dur="4s" repeatCount="indefinite" />
       </circle>
     </g>
   </defs>
@@ -33,14 +33,11 @@
         attributeName="transform" 
         type="rotate"
         values="0;90" 
-        dur="6s" 
+        dur="8s" 
         repeatCount="indefinite" 
       />
     </g>
   </mask>
 
-  <rect width="100%" height="100%" fill="white" mask="url(#mask)">
-    
-  </rect>
-
+  <rect width="100%" height="100%" fill="white" mask="url(#mask)"/>
 </svg>
