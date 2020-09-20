@@ -9,7 +9,7 @@ env:
   PROJECT_NAME: sdf-2d-demo
 
 jobs:
-  build-frontend:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current branch with lfs
