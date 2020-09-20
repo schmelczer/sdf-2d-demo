@@ -7,7 +7,7 @@
   "scripts": {
     "start": "webpack-dev-server --mode development",
     "lint": "npx eslint --fix \"src/**/*.ts\" && npx prettier --write \"src/**/*.ts\"",
-    "build": "webpack --mode production && find dist -type f -not -regex \"dist\\/.*\\.\\(html\\|png\\|ico\\|svg\\|jpg\\)\" | xargs rm && sed -i 's/^\\/\\/#.*.map//' dist/index.html"
+    "build": "rm -rf dist/* && webpack --mode production && find dist -type f -not -regex \"dist\\/.*\\.\\(html\\|png\\|ico\\|svg\\|jpg\\)\" | xargs rm && sed -i 's/^\\/\\/#.*.map//' dist/index.html"
   },
   "keywords": [],
   "author": "András Schmelczer <andras@schmelczer.dev> (https://schmelczer.dev/)",
@@ -20,19 +20,12 @@
   "browserslist": [
     "defaults"
   ],
-  "sideEffects": [
-    "*.scss",
-    "*.png",
-    "*.jpg",
-    "*.ico",
-    "*.svg"
-  ],
-  "optimization": {
-    "usedExports": true
-  },
+  "sideEffects": false,
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "@typescript-eslint/parser": "^3.10.1",
+    "@types/gl-matrix": "^2.4.5",
+    "gl-matrix": "^3.3.0",
     "autoprefixer": "^9.8.6",
     "css-loader": "^3.5.2",
     "eslint": "^7.9.0",

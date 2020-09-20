@@ -2,6 +2,7 @@ import { vec2, vec3 } from 'gl-matrix';
 import { CircleLight, compile, InvertedTunnel, Renderer } from 'sdf-2d';
 import { clamp } from '../helper/clamp';
 import { last } from '../helper/last';
+import { prettyPrint } from '../helper/pretty-print';
 import { Random } from '../helper/random';
 import { Scene } from './scene';
 
@@ -101,11 +102,7 @@ export class TunnelScene implements Scene {
     );
 
     this.renderer.autoscaleQuality(deltaTime);
-    this.overlay.innerText = JSON.stringify(
-      this.renderer.insights,
-      (_, v) => (v.toFixed ? Number(v.toFixed(2)) : v),
-      '  '
-    );
+    this.overlay.innerText = prettyPrint(this.renderer.insights);
 
     [
       ...this.tunnels.filter(

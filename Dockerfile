@@ -7,11 +7,10 @@ WORKDIR /home/node
 
 COPY src src
 COPY static static
-COPY package.json custom.d.ts tsconfig.json webpack.config.js ./
+COPY package.json tsconfig.json webpack.config.js ./
 
 RUN npm install
 RUN npm run build
-
 
 FROM nginx:alpine
 
@@ -22,7 +21,7 @@ WORKDIR /usr/share/nginx/html
 RUN rm -rf *
 COPY --from=build-webpage /home/node/dist .
 COPY --from=build-error-pages /home/python/built errors
-RUN find . -type f | xargs gzip -k9     &&\
+RUN find . -type f | xargs gzip -k9 &&\
     chmod -R 555 .
 
 COPY nginx-config /etc/nginx/

@@ -1,5 +1,6 @@
 import { vec2, vec3 } from 'gl-matrix';
 import { CircleLight, compile, Renderer, Tunnel } from 'sdf-2d';
+import { prettyPrint } from '../../helper/pretty-print';
 import { Scene } from '../scene';
 import { Droplet } from './droplet';
 
@@ -7,7 +8,7 @@ export class RainScene implements Scene {
   private droplets: Array<Droplet> = [];
   private light1: CircleLight = new CircleLight(
     vec2.create(),
-    vec3.fromValues(1, 0, 1),
+    vec3.fromValues(0.5, 0, 1),
     1
   );
   private light2: CircleLight = new CircleLight(
@@ -19,12 +20,6 @@ export class RainScene implements Scene {
   private renderer: Renderer;
   private canvas: HTMLCanvasElement;
   private overlay: HTMLDivElement;
-
-  public constructor() {
-    for (let i = 0; i < 40; i++) {
-      this.droplets.push(new Droplet());
-    }
-  }
 
   public async initialize(
     canvas: HTMLCanvasElement,
@@ -51,6 +46,10 @@ export class RainScene implements Scene {
       ambientLight: vec3.fromValues(0.45, 0.25, 0.45),
       tileMultiplier: 10,
     });
+
+    for (let i = 0; i < (canvas.getBoundingClientRect().width / 1000) * 20; i++) {
+      this.droplets.push(new Droplet());
+    }
   }
 
   public drawNextFrame(
@@ -60,12 +59,7 @@ export class RainScene implements Scene {
     const { width, height } = this.canvas.getBoundingClientRect();
     this.renderer.setViewArea(vec2.fromValues(0, height), vec2.fromValues(width, height));
     this.renderer.autoscaleQuality(deltaTime);
-
-    this.overlay.innerText = JSON.stringify(
-      this.renderer.insights,
-      (_, v) => (v.toFixed ? Number(v.toFixed(2)) : v),
-      '  '
-    );
+    this.overlay.innerText = prettyPrint(this.renderer.insights);
 
     const viewAreaSize = this.renderer.viewAreaSize;
 

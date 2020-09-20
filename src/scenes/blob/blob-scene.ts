@@ -1,6 +1,8 @@
-import { vec3 } from 'gl-matrix';
+import { vec2, vec3 } from 'gl-matrix';
 import { Circle, CircleLight, compile, InvertedTunnel, Renderer } from 'sdf-2d';
-import { Scene } from './scene';
+import { prettyPrint } from '../../helper/pretty-print';
+import { Scene } from '../scene';
+import { Blob } from './blob';
 
 export class BlobScene implements Scene {
   private renderer: Renderer;
@@ -19,24 +21,32 @@ export class BlobScene implements Scene {
     this.renderer = await compile(
       canvas,
       [
-        {
-          ...InvertedTunnel.descriptor,
-          shaderCombinationSteps: [0, 1, 2, 4, 8, 12],
-        },
         Circle.descriptor,
         {
           ...CircleLight.descriptor,
-          shaderCombinationSteps: [1, 2, 3, 4, 5, 6, 7],
+          shaderCombinationSteps: [1, 2],
         },
+        Blob.descriptor,
       ],
-      [vec3.fromValues(0.4, 1, 0.6), vec3.fromValues(1, 1, 0), vec3.fromValues(0.3, 1, 1)]
+      [
+        vec3.fromValues(0, 0, 0),
+        vec3.fromValues(224 / 255, 96 / 255, 126 / 255),
+        vec3.fromValues(119 / 255, 173 / 255, 120 / 255),
+      ]
     );
 
     this.renderer.setRuntimeSettings({
       ambientLight: vec3.fromValues(0.35, 0.1, 0.45),
-      shadowLength: 550,
+      shadowLength: 800,
     });
+
+    const { width, height } = this.canvas.getBoundingClientRect();
+    const length = vec2.length([width, height]);
+
+    this.blob = new Blob([width / 2, -length / 4 + length / 2]);
   }
+
+  private blob: Blob;
 
   private deltaSinceStart = 0;
   public drawNextFrame(
@@ -48,20 +58,28 @@ export class BlobScene implements Scene {
     this.renderer.setViewArea([0, height], [width, height]);
 
     this.renderer.autoscaleQuality(deltaTime);
-    this.overlay.innerText = JSON.stringify(
-      this.renderer.insights,
-      (_, v) => (v.toFixed ? Number(v.toFixed(2)) : v),
-      '  '
-    );
+    this.overlay.innerText = prettyPrint(this.renderer.insights);
 
-    const q = (this.deltaSinceStart % 5000) / 2500;
-    console.log(q);
+    const length = vec2.length([width, height]);
 
+    const q = (this.deltaSinceStart % 8000) / 4000;
+    this.blob.animate(this.deltaSinceStart);
     [
-      new Circle([width / 2, -width / 4], width / 2),
-      new CircleLight([q * width, Math.sin(q * Math.PI) * height], [1, 0.8, 0], 1),
+      new Circle([width / 2, -length / 4], length / 2),
+      this.blob,
       new CircleLight(
-        [(q - 1) * width, Math.sin((q - 1) * Math.PI) * height],
+        [
+          (Math.cos((1 - q) * Math.PI) * length) / 2 + width / 2,
+          (Math.sin((1 - q) * Math.PI) * length) / 2,
+        ],
+        [1, 0.8, 0],
+        1
+      ),
+      new CircleLight(
+        [
+          (Math.cos(-q * Math.PI) * length) / 2 + width / 2,
+          (Math.sin(-q * Math.PI) * length) / 2,
+        ],
         [0, 0.8, 1],
         1
       ),

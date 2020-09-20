@@ -1,4 +1,4 @@
-<img src="static/logo.svg" width=128 height=128 alt="logo" /> 
+<img src="static/logo-colored.svg" width=128 height=128 alt="logo" />
 
 # SDF-2D demo
 

@@ -6,9 +6,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const Sass = require('sass');
 
-const isProduction = process.env.NODE_ENV == 'production';
-const isDevelopment = !isProduction;
-
 const PATHS = {
   entryPoint: path.resolve(__dirname, 'src/index.ts'),
   bundles: path.resolve(__dirname, 'dist'),
@@ -23,7 +20,7 @@ module.exports = {
     filename: '[name].[contenthash].js',
     path: PATHS.bundles,
   },
-  devtool: isDevelopment ? 'source-map' : 'null',
+  devtool: 'source-map',
   watchOptions: {
     aggregateTimeout: 600,
     ignored: /node_modules/,
@@ -34,10 +31,11 @@ module.exports = {
   },
   optimization: {
     minimize: true,
+    usedExports: true,
     minimizer: [
       new TerserJSPlugin({
         sourceMap: true,
-        test: /\.js$/i,
+        test: /\.js$/,
       }),
       new OptimizeCSSAssetsPlugin({}),
     ],
@@ -65,7 +63,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.scss$/i,
+        test: /\.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
@@ -93,19 +91,21 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.svg$/,
-        loader: 'svg-url-loader',
-        options: {
-          limit: 10 * 1024,
-          noquotes: true,
-        },
-      },
-      {
-        test: /\.(ico|png|jpg)$/i,
+        test: /\.(ico|png|jpg)$/,
         use: {
           loader: 'file-loader',
           query: {
             outputPath: '/',
+            name: '[name].[ext]',
+          },
+        },
+      },
+      {
+        test: /\.(svg)$/,
+        use: {
+          loader: 'file-loader',
+          query: {
+            outputPath: '/static',
             name: '[name].[ext]',
           },
         },
