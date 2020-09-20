@@ -2,31 +2,53 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+
     <title>SDF-2D demo</title>
+
+    <meta property="og:image:width" content="1500" />
+    <meta property="og:image:height" content="785" />
+    <meta property="og:url" content="https://sdf2d.schmelczer.dev" />
+    <meta property="og:image" content="https://sdf2d.schmelczer.dev/og-image.jpg" />
+
+    <meta name="theme-color" content="#103783" />
     <meta
       name="description"
-      content="Some simple demos to showcase the possibilities of this library."
+      content="Some simple demos to showcase the possibilities of the sdf-2d library library. Click on the title to find out more."
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="static/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="static/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="static/favicons/favicon-16x16.png"
+    />
   </head>
   <body>
     <noscript>Javascript is required for this website.</noscript>
 
-    <button id="info">
-      <a href="https://github.com/schmelczerandras/sdf-2d" target="_BLANK">
-        SDF-2D<img src="static/logo-white.svg" alt="logo" />
-      </a>
-    </button>
-
-    <button id="remove-clutter">Hide text</button>
-
-    <div id="overlay"></div>
+    <a id="info" href="https://github.com/schmelczerandras/sdf-2d" target="_BLANK">
+      SDF-2D
+      <img src="static/logo-white.svg" alt="logo" />
+    </a>
+    <code id="overlay"></code>
+    <button id="toggle-text"></button>
 
     <canvas id="main"></canvas>
 
     <div id="errors-container">
       <div id="errors">
-        <h1>Error</h1>
+        <h1>Encountered an error</h1>
         <p id="error-text"></p>
       </div>
     </div>

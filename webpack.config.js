@@ -23,7 +23,7 @@ module.exports = {
     filename: '[name].[contenthash].js',
     path: PATHS.bundles,
   },
-  devtool: isDevelopment ? 'source-map' : '',
+  devtool: isDevelopment ? 'source-map' : 'null',
   watchOptions: {
     aggregateTimeout: 600,
     ignored: /node_modules/,
@@ -98,6 +98,16 @@ module.exports = {
         options: {
           limit: 10 * 1024,
           noquotes: true,
+        },
+      },
+      {
+        test: /\.(ico|png|jpg)$/i,
+        use: {
+          loader: 'file-loader',
+          query: {
+            outputPath: '/',
+            name: '[name].[ext]',
+          },
         },
       },
       {
