@@ -20,7 +20,9 @@
   "browserslist": [
     "defaults"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "*.scss"
+  ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "@typescript-eslint/parser": "^3.10.1",
