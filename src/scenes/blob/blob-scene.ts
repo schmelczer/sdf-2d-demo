@@ -62,7 +62,7 @@ export class BlobScene implements Scene {
 
     const length = vec2.length([width, height]);
 
-    const q = (this.deltaSinceStart % 8000) / 4000;
+    const q = (this.deltaSinceStart % 8000) / 4300;
     this.blob.animate(this.deltaSinceStart);
     [
       new Circle([width / 2, -length / 4], length / 2),

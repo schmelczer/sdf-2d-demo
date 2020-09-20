@@ -18,7 +18,7 @@ export class TunnelScene implements Scene {
     const canvasSize = this.canvas.getBoundingClientRect();
 
     let previousEnd = vec2.fromValues(0, 200);
-    let previousRadius = 75;
+    let previousRadius = 50;
 
     if (this.tunnels.length > 0) {
       previousEnd = last(this.tunnels).to;
@@ -28,19 +28,21 @@ export class TunnelScene implements Scene {
     let height =
       previousEnd.y +
       Random.getRandomInRange(-canvasSize.height / 3, canvasSize.height / 3);
-    height = clamp(height, 200, canvasSize.height - 200);
 
-    const currentEnd = vec2.fromValues(
-      this.tunnels.length * (canvasSize.width / 6),
-      height
+    height = clamp(
+      height,
+      canvasSize.height / 6 + 50,
+      canvasSize.height - canvasSize.height / 6 + 50
     );
+
+    const currentEnd = vec2.fromValues(this.tunnels.length * 300, height);
     const currentToRadius = (Random.getRandom() * canvasSize.height) / 6 + 50;
 
     this.tunnels.push(
       new InvertedTunnel(previousEnd, currentEnd, previousRadius, currentToRadius)
     );
 
-    if (this.tunnels.length % 5 == 0) {
+    if (this.tunnels.length % 3 == 0) {
       this.lights.push(
         new CircleLight(
           previousEnd,

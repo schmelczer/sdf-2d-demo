@@ -34,23 +34,29 @@ body {
     position: absolute;
   }
 
+  #info,
+  h1 {
+    font-size: 2.25rem;
+  }
+
   #info {
     @include card();
+    @include center-children();
 
-    font-size: 2.5rem;
     padding: 0.25rem 0.5rem;
     text-decoration: none;
 
-    @include center-children();
+    p {
+      padding-top: 2px;
+    }
 
     img {
-      @include square(72px);
+      @include square(64px);
       padding-left: 8px;
     }
 
     @media (max-width: $breakpoint) {
       font-size: 2rem;
-      padding: 0rem 0.5rem;
 
       img {
         @include square(40px);
@@ -104,7 +110,6 @@ body {
       padding: 1rem;
 
       h1 {
-        font-size: 3rem;
         padding: 1rem;
         text-align: center;
       }

@@ -51,15 +51,16 @@ export class Blob extends Drawable {
 
   public readonly boundingCircleRadius = 200;
 
-  protected readonly headRadius = 70;
-  protected readonly footRadius = 30;
+  protected readonly headRadius = 50;
+  protected readonly footRadius = 20;
 
-  private readonly headOffset = vec2.fromValues(0, 120);
-  private leftFootOffset = vec2.fromValues(-30, this.footRadius);
-  private rightFootOffset = vec2.fromValues(30, this.footRadius);
+  private readonly headOffset = vec2.fromValues(0, 80);
 
-  private leftFootOffsetDefault = vec2.fromValues(-30, this.footRadius);
-  private rightFootOffsetDefault = vec2.fromValues(30, this.footRadius);
+  private readonly leftFootOffsetDefault = vec2.fromValues(-20, this.footRadius);
+  private readonly rightFootOffsetDefault = vec2.fromValues(20, this.footRadius);
+
+  private leftFootOffset = vec2.create();
+  private rightFootOffset = vec2.create();
 
   protected boundingCircle = new Circle(vec2.create(), this.boundingCircleRadius);
   protected head = new Circle(vec2.create(), this.headRadius);
@@ -79,7 +80,7 @@ export class Blob extends Drawable {
   }
 
   public animate(time: number) {
-    const offset = 20;
+    const offset = 15;
     const q = (time % 1000) / 500;
 
     vec2.subtract(

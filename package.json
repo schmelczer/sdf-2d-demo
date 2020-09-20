@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Some simple demos to showcase the possibilities of this library.",
   "private": true,
-  "main": "index.js",
+  "main": "index.html",
   "scripts": {
     "start": "webpack-dev-server --mode development",
     "lint": "npx eslint --fix \"src/**/*.ts\" && npx prettier --write \"src/**/*.ts\"",
