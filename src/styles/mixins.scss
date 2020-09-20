@@ -1,0 +1,21 @@
+@mixin card {
+  backdrop-filter: blur(16px);
+  border: 2px solid white;
+  border-radius: 12px;
+
+  &:focus {
+    outline: none;
+    border: 4px solid white;
+  }
+}
+
+@mixin center-children {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin square($size) {
+  width: $size;
+  height: $size;
+}

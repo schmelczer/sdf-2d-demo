@@ -1,0 +1,118 @@
+@import './mixins';
+
+$bg: linear-gradient(45deg, #103783, #9bafd9);
+$breakpoint: 800px;
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Helvetica, Tahoma, sans-serif;
+  color: white;
+}
+
+html,
+body,
+canvas#main {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+html {
+  background: $bg;
+
+  @media (max-width: $breakpoint) {
+    font-size: 0.7rem;
+  }
+}
+
+body {
+  #info,
+  #overlay,
+  #toggle-text {
+    margin: 1rem 1.25rem;
+    position: absolute;
+  }
+
+  #info {
+    @include card();
+
+    font-size: 2.5rem;
+    padding: 0.25rem 0.5rem;
+    text-decoration: none;
+
+    @include center-children();
+
+    img {
+      @include square(72px);
+      padding-left: 8px;
+    }
+
+    @media (max-width: $breakpoint) {
+      font-size: 2rem;
+      padding: 0rem 0.5rem;
+
+      img {
+        @include square(40px);
+      }
+    }
+  }
+
+  #overlay {
+    right: 0;
+    font-size: 0.75rem;
+    white-space: pre;
+    font-family: 'Lucida Console', Monaco, monospace;
+
+    @media (max-width: $breakpoint) {
+      font-size: 0.6rem;
+    }
+  }
+
+  #toggle-text {
+    bottom: 0;
+    @include card();
+
+    font-size: 1.25rem;
+    width: 120px;
+    cursor: pointer;
+    padding: 0.2em 0.5rem;
+    background: none;
+
+    @media (max-width: $breakpoint) {
+      width: 80px;
+    }
+  }
+
+  #errors-container {
+    visibility: hidden;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    pointer-events: none;
+    @include center-children();
+
+    #errors {
+      @include card();
+
+      width: min(500px, 90vw);
+      height: min(500px, 90vw);
+      padding: 1rem;
+
+      h1 {
+        font-size: 3rem;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      p {
+        text-align: left;
+        font-size: 1.25rem;
+      }
+    }
+  }
+}
