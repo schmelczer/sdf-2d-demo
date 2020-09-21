@@ -4,6 +4,7 @@ import { clamp } from '../helper/clamp';
 import { last } from '../helper/last';
 import { prettyPrint } from '../helper/pretty-print';
 import { Random } from '../helper/random';
+import { rgb } from '../helper/rgb';
 import { Scene } from './scene';
 
 export class TunnelScene implements Scene {
@@ -75,7 +76,7 @@ export class TunnelScene implements Scene {
           shaderCombinationSteps: [1, 2, 3, 4, 5, 6, 7],
         },
       ],
-      [vec3.fromValues(0.4, 1, 0.6), vec3.fromValues(1, 1, 0), vec3.fromValues(0.3, 1, 1)]
+      [rgb(0.4, 1, 0.6), rgb(1, 1, 0), rgb(0.3, 1, 1)]
     );
 
     this.renderer.setRuntimeSettings({

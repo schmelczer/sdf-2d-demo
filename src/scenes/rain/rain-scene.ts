@@ -1,21 +1,14 @@
 import { vec2, vec3 } from 'gl-matrix';
 import { CircleLight, compile, Renderer, Tunnel } from 'sdf-2d';
 import { prettyPrint } from '../../helper/pretty-print';
+import { rgb255 } from '../../helper/rgb255';
 import { Scene } from '../scene';
 import { Droplet } from './droplet';
 
 export class RainScene implements Scene {
   private droplets: Array<Droplet> = [];
-  private light1: CircleLight = new CircleLight(
-    vec2.create(),
-    vec3.fromValues(0.5, 0, 1),
-    1
-  );
-  private light2: CircleLight = new CircleLight(
-    vec2.create(),
-    vec3.fromValues(1, 0, 0.5),
-    1
-  );
+  private light1: CircleLight = new CircleLight(vec2.create(), rgb255(184, 41, 255), 2);
+  private light2: CircleLight = new CircleLight(vec2.create(), rgb255(255, 31, 109), 2);
 
   private renderer: Renderer;
   private canvas: HTMLCanvasElement;
@@ -43,7 +36,7 @@ export class RainScene implements Scene {
     );
 
     this.renderer.setRuntimeSettings({
-      ambientLight: vec3.fromValues(0.45, 0.25, 0.45),
+      ambientLight: vec3.fromValues(0.2, 0.2, 0.2),
       tileMultiplier: 10,
     });
 

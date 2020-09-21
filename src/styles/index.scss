@@ -30,7 +30,7 @@ body {
   #info,
   #overlay,
   #toggle-text {
-    margin: 1rem 1.25rem;
+    margin: 1.25rem;
     position: absolute;
   }
 
@@ -105,8 +105,8 @@ body {
     #errors {
       @include card();
 
-      width: min(500px, 90vw);
-      height: min(500px, 90vw);
+      width: min(500px, 80vw);
+      height: min(500px, 80vw);
       padding: 1rem;
 
       h1 {
