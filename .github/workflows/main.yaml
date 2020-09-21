@@ -1,0 +1,21 @@
+name: Deploy site
+on:
+  push:
+    branches:
+      - main
+jobs:
+  firebase-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch with lfs
+        uses: actions/checkout@master
+      - name: Build site
+        run: |
+          npm install
+          npm run build
+      - name: Deploy html
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting --project schmelczer-dev
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
