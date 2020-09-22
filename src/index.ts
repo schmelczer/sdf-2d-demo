@@ -30,11 +30,17 @@ const overlay = document.querySelector('#overlay') as HTMLDivElement;
 
 let textVisible = false;
 const handleTextToggle = () => {
-  [info, overlay, errors].forEach(
-    (e) => (e.style.visibility = textVisible ? 'hidden' : 'inherit')
-  );
   textVisible = !textVisible;
+
+  [info, overlay, errors].forEach(
+    (e) => (e.style.visibility = textVisible ? 'inherit' : 'hidden')
+  );
   toggleButton.innerHTML = textVisible ? 'Hide text' : 'Show text';
+  if (textVisible) {
+    toggleButton.classList.remove('off');
+  } else {
+    toggleButton.classList.add('off');
+  }
 };
 toggleButton.addEventListener('click', handleTextToggle);
 handleTextToggle();

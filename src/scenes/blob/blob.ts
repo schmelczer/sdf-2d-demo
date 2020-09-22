@@ -5,14 +5,12 @@ export class Blob extends Drawable {
   public static descriptor: DrawableDescriptor = {
     sdf: {
       shader: `
-        uniform struct {
-          vec2 headCenter;
-          vec2 leftFootCenter;
-          vec2 rightFootCenter;
-          float headRadius;
-          float footRadius;
-          float k;
-        }[BLOB_COUNT] blobs;
+        uniform vec2 headCenters[BLOB_COUNT];
+        uniform vec2 leftFootCenters[BLOB_COUNT];
+        uniform vec2 rightFootCenters[BLOB_COUNT];
+        uniform float headRadii[BLOB_COUNT];
+        uniform float footRadii[BLOB_COUNT];
+        //uniform float ks[BLOB_COUNT];
 
         float smoothMin(float a, float b)
         {
@@ -27,9 +25,9 @@ export class Blob extends Drawable {
 
         void blobMinDistance(inout float minDistance, inout float color) {
           for (int i = 0; i < BLOB_COUNT; i++) {
-            float headDistance = circleDistance(blobs[i].headCenter, blobs[i].headRadius);
-            float leftFootDistance = circleDistance(blobs[i].leftFootCenter, blobs[i].footRadius);
-            float rightFootDistance = circleDistance(blobs[i].rightFootCenter, blobs[i].footRadius);
+            float headDistance = circleDistance(headCenters[i], headRadii[i]);
+            float leftFootDistance = circleDistance(leftFootCenters[i], footRadii[i]);
+            float rightFootDistance = circleDistance(rightFootCenters[i], footRadii[i]);
 
             float res = min(
               smoothMin(headDistance, leftFootDistance),
@@ -43,7 +41,13 @@ export class Blob extends Drawable {
       `,
       distanceFunctionName: 'blobMinDistance',
     },
-    uniformName: 'blobs',
+    propertyUniformMapping: {
+      footRadius: 'footRadii',
+      headRadius: 'headRadii',
+      rightFootCenter: 'rightFootCenters',
+      leftFootCenter: 'leftFootCenters',
+      headCenter: 'headCenters',
+    },
     uniformCountMacroName: 'BLOB_COUNT',
     shaderCombinationSteps: [1],
     empty: new Blob(vec2.fromValues(0, 0)),

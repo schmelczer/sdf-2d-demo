@@ -84,9 +84,15 @@ body {
     cursor: pointer;
     padding: 0.2em 0.5rem;
     background: none;
+    user-select: none;
+
+    &.off:not(:hover) {
+      opacity: 0.5;
+    }
+    transition: opacity 200ms;
 
     @media (max-width: $breakpoint) {
-      width: 80px;
+      width: 90px;
     }
   }
 

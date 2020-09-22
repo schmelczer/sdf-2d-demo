@@ -37,7 +37,7 @@ export class RainScene implements Scene {
 
     this.renderer.setRuntimeSettings({
       ambientLight: vec3.fromValues(0.2, 0.2, 0.2),
-      tileMultiplier: 10,
+      tileMultiplier: 8,
     });
 
     for (let i = 0; i < (canvas.getBoundingClientRect().width / 1000) * 20; i++) {
