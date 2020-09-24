@@ -1,6 +1,7 @@
 import { vec2, vec3 } from 'gl-matrix';
 import { Circle, CircleLight, compile, InvertedTunnel, Renderer } from 'sdf-2d';
 import { prettyPrint } from '../../helper/pretty-print';
+import { rgb255 } from '../../helper/rgb255';
 import { Scene } from '../scene';
 import { Blob } from './blob';
 
@@ -18,26 +19,24 @@ export class BlobScene implements Scene {
   ): Promise<void> {
     this.canvas = canvas;
     this.overlay = overlay;
-    this.renderer = await compile(
-      canvas,
-      [
-        Circle.descriptor,
-        {
-          ...CircleLight.descriptor,
-          shaderCombinationSteps: [1, 2],
-        },
-        Blob.descriptor,
-      ],
-      [
-        vec3.fromValues(0, 0, 0),
-        vec3.fromValues(224 / 255, 96 / 255, 126 / 255),
-        vec3.fromValues(119 / 255, 173 / 255, 120 / 255),
-      ]
-    );
+    this.renderer = await compile(canvas, [
+      Circle.descriptor,
+      {
+        ...CircleLight.descriptor,
+        shaderCombinationSteps: [1, 2],
+      },
+      Blob.descriptor,
+    ]);
 
     this.renderer.setRuntimeSettings({
       ambientLight: vec3.fromValues(0.35, 0.1, 0.45),
       shadowLength: 800,
+      colorPalette: [
+        rgb255(0, 0, 0),
+        rgb255(119, 173, 120),
+        rgb255(224, 96, 126),
+        rgb255(224, 96, 126),
+      ],
     });
 
     const { width, height } = this.canvas.getBoundingClientRect();

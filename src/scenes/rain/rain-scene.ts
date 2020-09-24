@@ -1,6 +1,7 @@
-import { vec2, vec3 } from 'gl-matrix';
+import { vec2 } from 'gl-matrix';
 import { CircleLight, compile, Renderer, Tunnel } from 'sdf-2d';
 import { prettyPrint } from '../../helper/pretty-print';
+import { rgb } from '../../helper/rgb';
 import { rgb255 } from '../../helper/rgb255';
 import { Scene } from '../scene';
 import { Droplet } from './droplet';
@@ -20,27 +21,23 @@ export class RainScene implements Scene {
   ): Promise<void> {
     this.canvas = canvas;
     this.overlay = overlay;
-    this.renderer = await compile(
-      canvas,
-      [
-        {
-          ...Tunnel.descriptor,
-          shaderCombinationSteps: [0, 1, 2, 4, 8, 12, 16, 24],
-        },
-        {
-          ...CircleLight.descriptor,
-          shaderCombinationSteps: [2],
-        },
-      ],
-      [vec3.fromValues(0.4, 1, 0.6), vec3.fromValues(1, 1, 0), vec3.fromValues(0.3, 1, 1)]
-    );
+    this.renderer = await compile(canvas, [
+      {
+        ...Tunnel.descriptor,
+        shaderCombinationSteps: [0, 1, 2, 4, 8, 12, 16, 24],
+      },
+      {
+        ...CircleLight.descriptor,
+        shaderCombinationSteps: [2],
+      },
+    ]);
 
     this.renderer.setRuntimeSettings({
-      ambientLight: vec3.fromValues(0.2, 0.2, 0.2),
-      tileMultiplier: 8,
+      ambientLight: rgb(0.2, 0.2, 0.2),
+      colorPalette: [rgb(1, 1, 0), rgb(1, 1, 0), rgb(0.3, 1, 1), rgb(0.3, 1, 1)],
     });
 
-    for (let i = 0; i < (canvas.getBoundingClientRect().width / 1000) * 20; i++) {
+    for (let i = 0; i < (canvas.getBoundingClientRect().width / 800) * 20; i++) {
       this.droplets.push(new Droplet());
     }
   }

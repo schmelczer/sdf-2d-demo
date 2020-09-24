@@ -21,21 +21,16 @@ removeUnnecessaryOutlines();
 
 const deltaTimeCalculator = new DeltaTimeCalculator();
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
-const info = document.querySelector('#info') as HTMLDivElement;
 const errorText = document.querySelector('#error-text') as HTMLParamElement;
-const errors = document.querySelector('#errors') as HTMLDivElement;
 const errorsContainer = document.querySelector('#errors-container') as HTMLDivElement;
 const toggleButton = document.querySelector('#toggle-text');
 const overlay = document.querySelector('#overlay') as HTMLDivElement;
 
-let textVisible = false;
+let textVisible = true;
 const handleTextToggle = () => {
   textVisible = !textVisible;
-
-  [info, overlay, errors].forEach(
-    (e) => (e.style.visibility = textVisible ? 'inherit' : 'hidden')
-  );
-  toggleButton.innerHTML = textVisible ? 'Hide text' : 'Show text';
+  overlay.style.visibility = textVisible ? 'visible' : 'hidden';
+  toggleButton.innerHTML = textVisible ? 'Hide insights' : 'Show insights';
   if (textVisible) {
     toggleButton.classList.remove('off');
   } else {

@@ -64,25 +64,22 @@ export class TunnelScene implements Scene {
   ): Promise<void> {
     this.canvas = canvas;
     this.overlay = overlay;
-    this.renderer = await compile(
-      canvas,
-      [
-        {
-          ...InvertedTunnel.descriptor,
-          shaderCombinationSteps: [0, 1, 2, 4, 8, 12],
-        },
-        {
-          ...CircleLight.descriptor,
-          shaderCombinationSteps: [1, 2, 3, 4, 5, 6, 7],
-        },
-      ],
-      [rgb(0.4, 1, 0.6), rgb(1, 1, 0), rgb(0.3, 1, 1)]
-    );
+    this.renderer = await compile(canvas, [
+      {
+        ...InvertedTunnel.descriptor,
+        shaderCombinationSteps: [0, 1, 2, 4, 8, 12],
+      },
+      {
+        ...CircleLight.descriptor,
+        shaderCombinationSteps: [1, 2, 3, 4, 5, 6, 7],
+      },
+    ]);
 
     this.renderer.setRuntimeSettings({
       isWorldInverted: true,
-      ambientLight: vec3.fromValues(0.35, 0.1, 0.45),
+      ambientLight: rgb(0.35, 0.1, 0.45),
       shadowLength: 550,
+      colorPalette: [rgb(0.4, 1, 0.6), rgb(1, 1, 0), rgb(0.3, 1, 1)],
     });
 
     for (let i = 0; i < 200; i++) {

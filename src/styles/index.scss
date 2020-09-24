@@ -80,7 +80,7 @@ body {
     @include card();
 
     font-size: 1.25rem;
-    width: 120px;
+    width: 150px;
     cursor: pointer;
     padding: 0.2em 0.5rem;
     background: none;
@@ -92,7 +92,7 @@ body {
     transition: opacity 200ms;
 
     @media (max-width: $breakpoint) {
-      width: 90px;
+      width: 110px;
     }
   }
 

@@ -35,7 +35,7 @@ export class Blob extends Drawable {
             );
 
             minDistance = min(minDistance, res);
-            color = mix(1.0, color, step(distanceNdcPixelSize + SURFACE_OFFSET, res));
+            color = mix(3.0 / {paletteSize}, color, step(distanceNdcPixelSize + SURFACE_OFFSET, res));
           }
         }
       `,
