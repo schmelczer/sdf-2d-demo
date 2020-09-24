@@ -2,6 +2,7 @@
   "hosting": {
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "site": "sdf2d-schmelczer-dev",
     "rewrites": [
       {
         "source": "**",
