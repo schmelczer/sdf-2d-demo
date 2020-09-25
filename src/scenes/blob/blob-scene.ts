@@ -1,6 +1,7 @@
-import { vec2, vec3 } from 'gl-matrix';
-import { Circle, CircleLight, compile, InvertedTunnel, Renderer } from 'sdf-2d';
+import { vec2 } from 'gl-matrix';
+import { Circle, CircleLight, compile, Renderer } from 'sdf-2d';
 import { prettyPrint } from '../../helper/pretty-print';
+import { rgb } from '../../helper/rgb';
 import { rgb255 } from '../../helper/rgb255';
 import { Scene } from '../scene';
 import { Blob } from './blob';
@@ -9,9 +10,6 @@ export class BlobScene implements Scene {
   private renderer: Renderer;
   private canvas: HTMLCanvasElement;
   private overlay: HTMLDivElement;
-
-  private tunnels: Array<InvertedTunnel> = [];
-  private lights: Array<CircleLight> = [];
 
   public async initialize(
     canvas: HTMLCanvasElement,
@@ -23,18 +21,17 @@ export class BlobScene implements Scene {
       Circle.descriptor,
       {
         ...CircleLight.descriptor,
-        shaderCombinationSteps: [1, 2],
+        shaderCombinationSteps: [0, 1, 2],
       },
       Blob.descriptor,
     ]);
 
     this.renderer.setRuntimeSettings({
-      ambientLight: vec3.fromValues(0.35, 0.1, 0.45),
-      shadowLength: 800,
+      ambientLight: rgb255(89, 25, 115),
       colorPalette: [
         rgb255(0, 0, 0),
-        rgb255(119, 173, 120),
-        rgb255(224, 96, 126),
+        rgb255(0, 0, 0),
+        rgb255(119, 143, 120),
         rgb255(224, 96, 126),
       ],
     });
@@ -71,7 +68,7 @@ export class BlobScene implements Scene {
           (Math.cos((1 - q) * Math.PI) * length) / 2 + width / 2,
           (Math.sin((1 - q) * Math.PI) * length) / 2,
         ],
-        [1, 0.8, 0],
+        rgb(1, 0.8, 0),
         1
       ),
       new CircleLight(
@@ -79,7 +76,7 @@ export class BlobScene implements Scene {
           (Math.cos(-q * Math.PI) * length) / 2 + width / 2,
           (Math.sin(-q * Math.PI) * length) / 2,
         ],
-        [0, 0.8, 1],
+        rgb(0, 0.8, 1),
         1
       ),
     ].forEach((d) => this.renderer.addDrawable(d));

@@ -43,7 +43,7 @@ export class TunnelScene implements Scene {
       new InvertedTunnel(previousEnd, currentEnd, previousRadius, currentToRadius)
     );
 
-    if (this.tunnels.length % 3 == 0) {
+    if (this.tunnels.length % 4 == 0) {
       this.lights.push(
         new CircleLight(
           previousEnd,
@@ -52,7 +52,7 @@ export class TunnelScene implements Scene {
             Random.getRandom(),
             Random.getRandom(),
           ]),
-          0.35
+          0.25
         )
       );
     }
@@ -78,8 +78,8 @@ export class TunnelScene implements Scene {
     this.renderer.setRuntimeSettings({
       isWorldInverted: true,
       ambientLight: rgb(0.35, 0.1, 0.45),
-      shadowLength: 550,
-      colorPalette: [rgb(0.4, 1, 0.6), rgb(1, 1, 0), rgb(0.3, 1, 1)],
+      backgroundColor: rgb(1, 1, 1),
+      colorPalette: [rgb(0.4, 0.5, 0.6), rgb(0, 0, 0), rgb(0, 0, 0), rgb(0, 0, 0)],
     });
 
     for (let i = 0; i < 200; i++) {

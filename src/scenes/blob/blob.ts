@@ -19,15 +19,18 @@ export class Blob extends Drawable {
           return -log2( res )/k;
         }
 
-        float circleDistance(vec2 circleCenter, float radius) {
-          return distance(position, circleCenter) - radius;
+        float circleDistance(vec2 circleCenter, float radius, vec2 target) {
+          return distance(target, circleCenter) - radius;
         }
 
-        void blobMinDistance(inout float minDistance, inout float color) {
+        float blobMinDistance(vec2 target, out float colorIndex) {
+          float minDistance = 1000.0;
+          colorIndex = 3.0;
+
           for (int i = 0; i < BLOB_COUNT; i++) {
-            float headDistance = circleDistance(headCenters[i], headRadii[i]);
-            float leftFootDistance = circleDistance(leftFootCenters[i], footRadii[i]);
-            float rightFootDistance = circleDistance(rightFootCenters[i], footRadii[i]);
+            float headDistance = circleDistance(headCenters[i], headRadii[i], target);
+            float leftFootDistance = circleDistance(leftFootCenters[i], footRadii[i], target);
+            float rightFootDistance = circleDistance(rightFootCenters[i], footRadii[i], target);
 
             float res = min(
               smoothMin(headDistance, leftFootDistance),
@@ -35,8 +38,9 @@ export class Blob extends Drawable {
             );
 
             minDistance = min(minDistance, res);
-            color = mix(3.0 / {paletteSize}, color, step(distanceNdcPixelSize + SURFACE_OFFSET, res));
           }
+
+          return minDistance;
         }
       `,
       distanceFunctionName: 'blobMinDistance',

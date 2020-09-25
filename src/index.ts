@@ -14,7 +14,7 @@ import { TunnelScene } from './scenes/tunnel-scene';
 import './styles/index.scss';
 
 const scenes = [TunnelScene, RainScene, BlobScene];
-const sceneIntervalInSeconds = 8;
+const sceneIntervalInSeconds = 800;
 
 glMatrix.setMatrixArrayType(Array);
 removeUnnecessaryOutlines();

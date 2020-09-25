@@ -1,4 +1,4 @@
-import { vec2 } from 'gl-matrix';
+import { vec2, vec3 } from 'gl-matrix';
 import { CircleLight, compile, Renderer, Tunnel } from 'sdf-2d';
 import { prettyPrint } from '../../helper/pretty-print';
 import { rgb } from '../../helper/rgb';
@@ -34,7 +34,13 @@ export class RainScene implements Scene {
 
     this.renderer.setRuntimeSettings({
       ambientLight: rgb(0.2, 0.2, 0.2),
-      colorPalette: [rgb(1, 1, 0), rgb(1, 1, 0), rgb(0.3, 1, 1), rgb(0.3, 1, 1)],
+      backgroundColor: vec3.fromValues(1, 1, 1),
+      colorPalette: [
+        rgb(1, 1, 1),
+        vec3.fromValues(0.3, 1, 1),
+        rgb(1, 1, 0),
+        rgb(0.3, 1, 1),
+      ],
     });
 
     for (let i = 0; i < (canvas.getBoundingClientRect().width / 800) * 20; i++) {
