@@ -5,6 +5,7 @@ import { last } from '../helper/last';
 import { prettyPrint } from '../helper/pretty-print';
 import { Random } from '../helper/random';
 import { rgb } from '../helper/rgb';
+import { rgba } from '../helper/rgba';
 import { Scene } from './scene';
 
 export class TunnelScene implements Scene {
@@ -78,7 +79,7 @@ export class TunnelScene implements Scene {
     this.renderer.setRuntimeSettings({
       isWorldInverted: true,
       ambientLight: rgb(0.35, 0.1, 0.45),
-      backgroundColor: rgb(1, 1, 1),
+      backgroundColor: rgba(1, 1, 1, 1),
       colorPalette: [rgb(0.4, 0.5, 0.6), rgb(0, 0, 0), rgb(0, 0, 0), rgb(0, 0, 0)],
     });
 

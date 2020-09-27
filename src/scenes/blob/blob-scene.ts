@@ -30,7 +30,7 @@ export class BlobScene implements Scene {
       ambientLight: rgb255(89, 25, 115),
       colorPalette: [
         rgb255(0, 0, 0),
-        rgb255(0, 0, 0),
+        rgb255(119, 143, 120),
         rgb255(119, 143, 120),
         rgb255(224, 96, 126),
       ],

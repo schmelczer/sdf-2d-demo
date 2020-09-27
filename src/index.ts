@@ -4,7 +4,7 @@ import '../static/favicons/favicon-16x16.png';
 import '../static/favicons/favicon-32x32.png';
 import '../static/favicons/favicon.ico';
 import '../static/logo-white.svg';
-import '../static/og-image.jpg';
+import '../static/og-image.png';
 import { DeltaTimeCalculator } from './helper/delta-time-calculator';
 import { removeUnnecessaryOutlines } from './helper/remove-unnecessary-outlines';
 import { BlobScene } from './scenes/blob/blob-scene';
