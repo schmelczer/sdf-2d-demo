@@ -7,7 +7,7 @@
   "scripts": {
     "start": "webpack-dev-server --mode development",
     "lint": "npx eslint --fix \"src/**/*.ts\" && npx prettier --write \"src/**/*.ts\"",
-    "build": "rm -rf dist/* && webpack --mode production && find dist -type f -not -regex \"dist\\/.*\\.\\(html\\|png\\|ico\\|svg\\|jpg\\)\" | xargs rm && sed -i 's/^\\/\\/#.*.map//' dist/index.html"
+    "build": "rm -rf dist/* && webpack --mode production && find dist -type f -not -regex \"dist\\/.*\\.\\(html\\|png\\|ico\\|svg\\|jpg\\|txt\\)\" | xargs rm && sed -i 's/^\\/\\/#.*.map//' dist/index.html"
   },
   "keywords": [],
   "author": "András Schmelczer <andras@schmelczer.dev> (https://schmelczer.dev/)",
