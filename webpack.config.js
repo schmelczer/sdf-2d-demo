@@ -101,6 +101,16 @@ module.exports = {
         },
       },
       {
+        test: /no-change.*(html|txt)$/i,
+        use: {
+          loader: 'file-loader',
+          query: {
+            outputPath: '/',
+            name: '[name].[ext]',
+          },
+        },
+      },
+      {
         test: /\.(svg)$/,
         use: {
           loader: 'file-loader',

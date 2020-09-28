@@ -4,6 +4,8 @@ import '../static/favicons/favicon-16x16.png';
 import '../static/favicons/favicon-32x32.png';
 import '../static/favicons/favicon.ico';
 import '../static/logo-white.svg';
+import '../static/no-change/404.html';
+import '../static/no-change/robots.txt';
 import '../static/og-image.png';
 import { DeltaTimeCalculator } from './helper/delta-time-calculator';
 import { removeUnnecessaryOutlines } from './helper/remove-unnecessary-outlines';
