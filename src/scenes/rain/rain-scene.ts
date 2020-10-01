@@ -36,6 +36,7 @@ export class RainScene implements Scene {
       ambientLight: rgb(0.2, 0.2, 0.2),
       backgroundColor: rgb(1, 1, 1),
       colorPalette: [rgb(1, 1, 1), rgb(0.3, 1, 1), rgb(1, 1, 0), rgb(0.3, 1, 1)],
+      enableHighDpiRendering: false,
     });
 
     for (let i = 0; i < (canvas.getBoundingClientRect().width / 800) * 20; i++) {

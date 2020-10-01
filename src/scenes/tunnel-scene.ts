@@ -81,6 +81,7 @@ export class TunnelScene implements Scene {
       ambientLight: rgb(0.35, 0.1, 0.45),
       backgroundColor: rgba(1, 1, 1, 1),
       colorPalette: [rgb(0.4, 0.5, 0.6), rgb(0, 0, 0), rgb(0, 0, 0), rgb(0, 0, 0)],
+      enableHighDpiRendering: false,
     });
 
     for (let i = 0; i < 200; i++) {

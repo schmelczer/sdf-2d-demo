@@ -42,10 +42,10 @@ const handleTextToggle = () => {
 toggleButton.addEventListener('click', handleTextToggle);
 handleTextToggle();
 
-const handleScene = async (SceneConstructor: new () => Scene) => {
-  const scene = new SceneConstructor();
-  await scene.initialize(canvas, overlay);
-
+const handleScene = async (
+  currentScene: Scene,
+  NextSceneConstructor: new () => Scene
+): Promise<Scene> => {
   let triggerIsOver: () => void;
   const isOver = new Promise((resolve) => (triggerIsOver = resolve));
   let timeSinceStart = 0;
@@ -53,7 +53,7 @@ const handleScene = async (SceneConstructor: new () => Scene) => {
   const handleFrame = (currentTime: DOMHighResTimeStamp) => {
     const deltaTime = deltaTimeCalculator.getNextDeltaTime(currentTime);
 
-    scene.drawNextFrame(currentTime, deltaTime);
+    currentScene.drawNextFrame(currentTime, deltaTime);
 
     if ((timeSinceStart += deltaTime) > sceneIntervalInSeconds * 1000) {
       triggerIsOver();
@@ -63,15 +63,21 @@ const handleScene = async (SceneConstructor: new () => Scene) => {
   };
 
   requestAnimationFrame(handleFrame);
+  const nextScene = new NextSceneConstructor();
+  await nextScene.initialize(canvas, overlay);
   await isOver;
-  scene.destroy();
+  currentScene.destroy();
+
+  return nextScene;
 };
 
 const main = async () => {
   try {
     let i = 0;
+    let currentScene: Scene = new scenes[i++]();
+    await currentScene.initialize(canvas, overlay);
     for (;;) {
-      await handleScene(scenes[i++ % scenes.length]);
+      currentScene = await handleScene(currentScene, scenes[i++ % scenes.length]);
     }
   } catch (e) {
     console.error(e);
