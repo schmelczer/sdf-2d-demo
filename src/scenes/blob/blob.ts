@@ -53,7 +53,7 @@ export class Blob extends Drawable {
       headCenter: 'headCenters',
     },
     uniformCountMacroName: 'BLOB_COUNT',
-    shaderCombinationSteps: [1],
+    shaderCombinationSteps: [0, 1],
     empty: new Blob(vec2.fromValues(0, 0)),
   };
 

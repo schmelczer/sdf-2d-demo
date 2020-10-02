@@ -10,12 +10,13 @@ import '../static/og-image.png';
 import { DeltaTimeCalculator } from './helper/delta-time-calculator';
 import { removeUnnecessaryOutlines } from './helper/remove-unnecessary-outlines';
 import { BlobScene } from './scenes/blob/blob-scene';
+import { MetaballScene } from './scenes/metaball/metaball-scene';
 import { RainScene } from './scenes/rain/rain-scene';
 import { Scene } from './scenes/scene';
 import { TunnelScene } from './scenes/tunnel-scene';
 import './styles/index.scss';
 
-const scenes = [TunnelScene, RainScene, BlobScene];
+const scenes = [TunnelScene, MetaballScene, RainScene, BlobScene];
 const sceneIntervalInSeconds = 8;
 
 glMatrix.setMatrixArrayType(Array);

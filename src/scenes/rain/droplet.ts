@@ -1,9 +1,9 @@
 import { vec2 } from 'gl-matrix';
-import { Tunnel } from 'sdf-2d';
+import { Droplet } from 'sdf-2d';
 import { Random } from '../../helper/random';
 
-export class Droplet {
-  public readonly drawable: Tunnel;
+export class DropletWrapper {
+  public readonly drawable: Droplet;
 
   private speed = Random.getRandom() * 0.2 + 0.2;
   private position = vec2.fromValues(
@@ -15,7 +15,7 @@ export class Droplet {
   constructor() {
     const size = Random.getRandom() * 2 + 2;
 
-    this.drawable = new Tunnel(
+    this.drawable = new Droplet(
       vec2.create(),
       vec2.create(),
       size + Random.getRandom() * 2 + 2,

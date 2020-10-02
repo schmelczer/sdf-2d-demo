@@ -1,13 +1,13 @@
 import { vec2 } from 'gl-matrix';
-import { CircleLight, compile, Renderer, Tunnel } from 'sdf-2d';
+import { CircleLight, compile, Droplet, Renderer } from 'sdf-2d';
 import { prettyPrint } from '../../helper/pretty-print';
 import { rgb } from '../../helper/rgb';
 import { rgb255 } from '../../helper/rgb255';
 import { Scene } from '../scene';
-import { Droplet } from './droplet';
+import { DropletWrapper } from './droplet';
 
 export class RainScene implements Scene {
-  private droplets: Array<Droplet> = [];
+  private droplets: Array<DropletWrapper> = [];
   private light1: CircleLight = new CircleLight(vec2.create(), rgb255(184, 41, 255), 2);
   private light2: CircleLight = new CircleLight(vec2.create(), rgb255(255, 31, 109), 2);
 
@@ -23,12 +23,12 @@ export class RainScene implements Scene {
     this.overlay = overlay;
     this.renderer = await compile(canvas, [
       {
-        ...Tunnel.descriptor,
+        ...Droplet.descriptor,
         shaderCombinationSteps: [0, 1, 2, 4, 8, 12, 16, 24],
       },
       {
         ...CircleLight.descriptor,
-        shaderCombinationSteps: [2],
+        shaderCombinationSteps: [0, 2],
       },
     ]);
 
@@ -36,11 +36,10 @@ export class RainScene implements Scene {
       ambientLight: rgb(0.2, 0.2, 0.2),
       backgroundColor: rgb(1, 1, 1),
       colorPalette: [rgb(1, 1, 1), rgb(0.3, 1, 1), rgb(1, 1, 0), rgb(0.3, 1, 1)],
-      enableHighDpiRendering: false,
     });
 
     for (let i = 0; i < (canvas.getBoundingClientRect().width / 800) * 20; i++) {
-      this.droplets.push(new Droplet());
+      this.droplets.push(new DropletWrapper());
     }
   }
 
