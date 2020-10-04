@@ -71,7 +71,7 @@ export class TunnelScene implements Scene {
     canvas: HTMLCanvasElement,
     overlay: HTMLDivElement
   ): Promise<void> {
-    const noiseTexture = await renderNoise([1000, 1], 60, 1 / 8);
+    const noiseTexture = await renderNoise([1024, 1], 60, 1 / 8);
 
     this.canvas = canvas;
     this.overlay = overlay;
