@@ -64,10 +64,12 @@ const handleScene = async (
   };
 
   requestAnimationFrame(handleFrame);
-  const nextScene = new NextSceneConstructor();
-  await nextScene.initialize(canvas, overlay);
+
   await isOver;
   currentScene.destroy();
+
+  const nextScene = new NextSceneConstructor();
+  await nextScene.initialize(canvas, overlay);
 
   return nextScene;
 };

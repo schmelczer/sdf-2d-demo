@@ -10,13 +10,12 @@ export class Blob extends Drawable {
         uniform vec2 rightFootCenters[BLOB_COUNT];
         uniform float headRadii[BLOB_COUNT];
         uniform float footRadii[BLOB_COUNT];
-        //uniform float ks[BLOB_COUNT];
 
         float smoothMin(float a, float b)
         {
           const float k = 80.0;
-          float res = exp2( -k*a ) + exp2( -k*b );
-          return -log2( res )/k;
+          float res = exp2(-k * a) + exp2(-k * b);
+          return -log2(res) / k;
         }
 
         float circleDistance(vec2 circleCenter, float radius, vec2 target) {

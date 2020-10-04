@@ -1,5 +1,13 @@
 import { vec2, vec3 } from 'gl-matrix';
-import { CircleLight, compile, InvertedTunnel, Renderer } from 'sdf-2d';
+import {
+  CircleLight,
+  compile,
+  FilteringOptions,
+  InvertedTunnel,
+  Renderer,
+  renderNoise,
+  WrapOptions,
+} from 'sdf-2d';
 import { clamp } from '../helper/clamp';
 import { last } from '../helper/last';
 import { prettyPrint } from '../helper/pretty-print';
@@ -63,6 +71,7 @@ export class TunnelScene implements Scene {
     canvas: HTMLCanvasElement,
     overlay: HTMLDivElement
   ): Promise<void> {
+    const noiseTexture = await renderNoise([1000, 1], 60, 1 / 8, true);
     this.canvas = canvas;
     this.overlay = overlay;
     this.renderer = await compile(canvas, [
@@ -81,6 +90,15 @@ export class TunnelScene implements Scene {
       ambientLight: rgb(0.35, 0.1, 0.45),
       backgroundColor: rgba(1, 1, 1, 1),
       colorPalette: [rgb(0.4, 0.5, 0.6), rgb(0, 0, 0), rgb(0, 0, 0), rgb(0, 0, 0)],
+      textures: {
+        noiseTexture: {
+          source: noiseTexture,
+          overrides: {
+            maxFilter: FilteringOptions.LINEAR,
+            wrapS: WrapOptions.MIRRORED_REPEAT,
+          },
+        },
+      },
     });
 
     for (let i = 0; i < 200; i++) {
