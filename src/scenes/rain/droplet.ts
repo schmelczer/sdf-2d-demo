@@ -1,9 +1,10 @@
 import { vec2 } from 'gl-matrix';
-import { Droplet } from 'sdf-2d';
+import { DropletFactory } from 'sdf-2d';
 import { Random } from '../../helper/random';
 
+export const Droplet = DropletFactory(1);
 export class DropletWrapper {
-  public readonly drawable: Droplet;
+  public readonly drawable: InstanceType<typeof Droplet>;
 
   private speed = Random.getRandom() * 0.2 + 0.2;
   private position = vec2.fromValues(

@@ -1,10 +1,10 @@
 import { vec2 } from 'gl-matrix';
-import { Circle, CircleLight, compile, Renderer } from 'sdf-2d';
+import { CircleFactory, CircleLight, compile, Renderer, rgb, rgb255 } from 'sdf-2d';
 import { prettyPrint } from '../../helper/pretty-print';
-import { rgb } from '../../helper/rgb';
-import { rgb255 } from '../../helper/rgb255';
 import { Scene } from '../scene';
 import { Blob } from './blob';
+
+const Circle = CircleFactory(rgb255(119, 143, 120));
 
 export class BlobScene implements Scene {
   private renderer: Renderer;

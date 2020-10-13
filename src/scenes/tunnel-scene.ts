@@ -3,25 +3,26 @@ import {
   CircleLight,
   compile,
   FilteringOptions,
-  InvertedTunnel,
+  InvertedTunnelFactory,
   Renderer,
   renderNoise,
+  rgb,
   WrapOptions,
 } from 'sdf-2d';
 import { clamp } from '../helper/clamp';
 import { last } from '../helper/last';
 import { prettyPrint } from '../helper/pretty-print';
 import { Random } from '../helper/random';
-import { rgb } from '../helper/rgb';
-import { rgba } from '../helper/rgba';
 import { Scene } from './scene';
+
+const InvertedTunnel = InvertedTunnelFactory(3);
 
 export class TunnelScene implements Scene {
   private renderer: Renderer;
   private canvas: HTMLCanvasElement;
   private overlay: HTMLDivElement;
 
-  private tunnels: Array<InvertedTunnel> = [];
+  private tunnels: Array<InstanceType<typeof InvertedTunnel>> = [];
   private lights: Array<CircleLight> = [];
 
   private generateTunnel() {
@@ -71,7 +72,7 @@ export class TunnelScene implements Scene {
     canvas: HTMLCanvasElement,
     overlay: HTMLDivElement
   ): Promise<void> {
-    const noiseTexture = await renderNoise([1024, 1], 60, 1 / 8);
+    const noiseTexture = await renderNoise([1024, 1], 15, 1);
 
     this.canvas = canvas;
     this.overlay = overlay;
@@ -89,7 +90,6 @@ export class TunnelScene implements Scene {
     this.renderer.setRuntimeSettings({
       isWorldInverted: true,
       ambientLight: rgb(0.35, 0.1, 0.45),
-      backgroundColor: rgba(1, 1, 1, 1),
       colorPalette: [rgb(0.4, 0.5, 0.6), rgb(0, 0, 0), rgb(0, 0, 0), rgb(0, 0, 0)],
       textures: {
         noiseTexture: {

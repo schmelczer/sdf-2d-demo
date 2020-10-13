@@ -1,10 +1,8 @@
 import { vec2 } from 'gl-matrix';
-import { CircleLight, compile, Droplet, Renderer } from 'sdf-2d';
+import { CircleLight, compile, Renderer, rgb, rgb255 } from 'sdf-2d';
 import { prettyPrint } from '../../helper/pretty-print';
-import { rgb } from '../../helper/rgb';
-import { rgb255 } from '../../helper/rgb255';
 import { Scene } from '../scene';
-import { DropletWrapper } from './droplet';
+import { Droplet, DropletWrapper } from './droplet';
 
 export class RainScene implements Scene {
   private droplets: Array<DropletWrapper> = [];
@@ -34,7 +32,6 @@ export class RainScene implements Scene {
 
     this.renderer.setRuntimeSettings({
       ambientLight: rgb(0.2, 0.2, 0.2),
-      backgroundColor: rgb(1, 1, 1),
       colorPalette: [rgb(1, 1, 1), rgb(0.3, 1, 1), rgb(1, 1, 0), rgb(0.3, 1, 1)],
     });
 

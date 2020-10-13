@@ -1,5 +1,6 @@
 import { mat2d, vec2 } from 'gl-matrix';
-import { Circle, Drawable, DrawableDescriptor } from 'sdf-2d';
+import { Drawable, DrawableDescriptor } from 'sdf-2d';
+import { Circle } from '../../helper/circle';
 
 export class Blob extends Drawable {
   public static descriptor: DrawableDescriptor = {
@@ -22,9 +23,9 @@ export class Blob extends Drawable {
           return distance(target, circleCenter) - radius;
         }
 
-        float blobMinDistance(vec2 target, out float colorIndex) {
+        float blobMinDistance(vec2 target, out vec4 color) {
           float minDistance = 1000.0;
-          colorIndex = 3.0;
+          color = readFromPalette(3);
 
           for (int i = 0; i < BLOB_COUNT; i++) {
             float headDistance = circleDistance(headCenters[i], headRadii[i], target);
@@ -124,7 +125,7 @@ export class Blob extends Drawable {
   }
 
   public minDistance(target: vec2): number {
-    return this.boundingCircle.minDistance(target);
+    return this.boundingCircle.distance(target);
   }
 
   protected getObjectToSerialize(transform2d: mat2d, transform1d: number): any {

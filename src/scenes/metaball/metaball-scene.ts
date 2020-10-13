@@ -1,11 +1,9 @@
 import { vec2 } from 'gl-matrix';
-import { compile, Flashlight, MetaCircle, Renderer } from 'sdf-2d';
+import { compile, Flashlight, Renderer, rgb, rgb255 } from 'sdf-2d';
 import { prettyPrint } from '../../helper/pretty-print';
 import { Random } from '../../helper/random';
-import { rgb } from '../../helper/rgb';
-import { rgb255 } from '../../helper/rgb255';
 import { Scene } from '../scene';
-import { Metaball } from './metaball';
+import { Metaball, MetaCircle } from './metaball';
 
 export class MetaballScene implements Scene {
   private circles: Array<Metaball> = [];
