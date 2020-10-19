@@ -66,12 +66,15 @@ body {
 
   #overlay {
     right: 0;
-    font-size: 0.75rem;
-    white-space: pre;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
     font-family: 'Lucida Console', Monaco, monospace;
 
+    font-size: 0.75rem;
+    max-width: 400px;
     @media (max-width: $breakpoint) {
       font-size: 0.6rem;
+      max-width: 200px;
     }
   }
 

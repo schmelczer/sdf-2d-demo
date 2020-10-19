@@ -1,65 +1,66 @@
 import { vec2 } from 'gl-matrix';
-import { CircleFactory, CircleLight, compile, Renderer, rgb, rgb255 } from 'sdf-2d';
+import { CircleFactory, CircleLight, Renderer, rgb, rgb255, runAnimation } from 'sdf-2d';
 import { prettyPrint } from '../../helper/pretty-print';
+import { settings } from '../../settings';
 import { Scene } from '../scene';
 import { Blob } from './blob';
 
 const Circle = CircleFactory(rgb255(119, 143, 120));
 
 export class BlobScene implements Scene {
-  private renderer: Renderer;
   private canvas: HTMLCanvasElement;
   private overlay: HTMLDivElement;
 
-  public async initialize(
-    canvas: HTMLCanvasElement,
-    overlay: HTMLDivElement
-  ): Promise<void> {
+  public async run(canvas: HTMLCanvasElement, overlay: HTMLDivElement): Promise<void> {
     this.canvas = canvas;
     this.overlay = overlay;
-    this.renderer = await compile(canvas, [
-      Circle.descriptor,
-      {
-        ...CircleLight.descriptor,
-        shaderCombinationSteps: [0, 1, 2],
-      },
-      Blob.descriptor,
-    ]);
-
-    this.renderer.setRuntimeSettings({
-      ambientLight: rgb255(89, 25, 115),
-      colorPalette: [
-        rgb255(0, 0, 0),
-        rgb255(119, 143, 120),
-        rgb255(119, 143, 120),
-        rgb255(224, 96, 126),
-      ],
-    });
 
     const { width, height } = this.canvas.getBoundingClientRect();
     const length = vec2.length([width, height]);
 
     this.blob = new Blob([width / 2, -length / 4 + length / 2]);
+
+    await runAnimation(
+      canvas,
+      [
+        Circle.descriptor,
+        {
+          ...CircleLight.descriptor,
+          shaderCombinationSteps: [0, 1, 2],
+        },
+        Blob.descriptor,
+      ],
+      this.drawNextFrame.bind(this),
+      {},
+      {
+        ambientLight: rgb255(89, 25, 115),
+        enableHighDpiRendering: true,
+        colorPalette: [
+          rgb255(0, 0, 0),
+          rgb255(119, 143, 120),
+          rgb255(119, 143, 120),
+          rgb255(224, 96, 126),
+        ],
+      }
+    );
   }
 
   private blob: Blob;
 
-  private deltaSinceStart = 0;
-  public drawNextFrame(
+  private drawNextFrame(
+    renderer: Renderer,
     currentTime: DOMHighResTimeStamp,
     deltaTime: DOMHighResTimeStamp
-  ): void {
+  ): boolean {
     const { width, height } = this.canvas.getBoundingClientRect();
-    this.deltaSinceStart += deltaTime;
-    this.renderer.setViewArea([0, height], [width, height]);
+    renderer.setViewArea([0, height], [width, height]);
 
-    this.renderer.autoscaleQuality(deltaTime);
-    this.overlay.innerText = prettyPrint(this.renderer.insights);
+    this.overlay.innerText = prettyPrint(renderer.insights);
 
     const length = vec2.length([width, height]);
 
-    const q = (this.deltaSinceStart % 8000) / 4300;
-    this.blob.animate(this.deltaSinceStart);
+    const q = (currentTime % 8000) / 4300;
+    this.blob.animate(currentTime);
     [
       new Circle([width / 2, -length / 4], length / 2),
       this.blob,
@@ -79,12 +80,8 @@ export class BlobScene implements Scene {
         rgb(0, 0.8, 1),
         1
       ),
-    ].forEach((d) => this.renderer.addDrawable(d));
+    ].forEach((d) => renderer.addDrawable(d));
 
-    this.renderer.renderDrawables();
-  }
-
-  public destroy(): void {
-    this.renderer.destroy();
+    return currentTime < settings.sceneTimeInMilliseconds;
   }
 }

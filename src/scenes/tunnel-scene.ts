@@ -1,24 +1,24 @@
 import { vec2, vec3 } from 'gl-matrix';
 import {
   CircleLight,
-  compile,
   FilteringOptions,
   InvertedTunnelFactory,
   Renderer,
   renderNoise,
   rgb,
+  runAnimation,
   WrapOptions,
 } from 'sdf-2d';
 import { clamp } from '../helper/clamp';
 import { last } from '../helper/last';
 import { prettyPrint } from '../helper/pretty-print';
 import { Random } from '../helper/random';
+import { settings } from '../settings';
 import { Scene } from './scene';
 
 const InvertedTunnel = InvertedTunnelFactory(3);
 
 export class TunnelScene implements Scene {
-  private renderer: Renderer;
   private canvas: HTMLCanvasElement;
   private overlay: HTMLDivElement;
 
@@ -68,73 +68,69 @@ export class TunnelScene implements Scene {
     }
   }
 
-  public async initialize(
-    canvas: HTMLCanvasElement,
-    overlay: HTMLDivElement
-  ): Promise<void> {
+  public async run(canvas: HTMLCanvasElement, overlay: HTMLDivElement): Promise<void> {
     const noiseTexture = await renderNoise([1024, 1], 15, 1);
 
     this.canvas = canvas;
     this.overlay = overlay;
-    this.renderer = await compile(canvas, [
-      {
-        ...InvertedTunnel.descriptor,
-        shaderCombinationSteps: [0, 1, 2, 4, 8, 12],
-      },
-      {
-        ...CircleLight.descriptor,
-        shaderCombinationSteps: [0, 1, 2, 3, 4, 5, 6, 7],
-      },
-    ]);
-
-    this.renderer.setRuntimeSettings({
-      isWorldInverted: true,
-      ambientLight: rgb(0.35, 0.1, 0.45),
-      colorPalette: [rgb(0.4, 0.5, 0.6), rgb(0, 0, 0), rgb(0, 0, 0), rgb(0, 0, 0)],
-      textures: {
-        noiseTexture: {
-          source: noiseTexture,
-          overrides: {
-            maxFilter: FilteringOptions.LINEAR,
-            wrapS: WrapOptions.MIRRORED_REPEAT,
-          },
-        },
-      },
-    });
 
     for (let i = 0; i < 200; i++) {
       this.generateTunnel();
     }
+
+    await runAnimation(
+      canvas,
+      [
+        {
+          ...InvertedTunnel.descriptor,
+          shaderCombinationSteps: [0, 1, 2, 4, 8, 12],
+        },
+        {
+          ...CircleLight.descriptor,
+          shaderCombinationSteps: [0, 1, 2, 3, 4, 5, 6, 7],
+        },
+      ],
+      this.drawNextFrame.bind(this),
+      { lightPenetrationRatio: 0.5 },
+      {
+        isWorldInverted: true,
+        enableHighDpiRendering: true,
+        ambientLight: rgb(0.35, 0.1, 0.45),
+        colorPalette: [rgb(0.4, 0.5, 0.6), rgb(0, 0, 0), rgb(0, 0, 0), rgb(0, 0, 0)],
+        textures: {
+          noiseTexture: {
+            source: noiseTexture,
+            overrides: {
+              maxFilter: FilteringOptions.LINEAR,
+              wrapS: WrapOptions.MIRRORED_REPEAT,
+            },
+          },
+        },
+      }
+    );
   }
 
   private deltaSinceStart = 0;
-  public drawNextFrame(
+  private drawNextFrame(
+    renderer: Renderer,
     currentTime: DOMHighResTimeStamp,
     deltaTime: DOMHighResTimeStamp
-  ): void {
+  ): boolean {
     const { width, height } = this.canvas.getBoundingClientRect();
     this.deltaSinceStart += deltaTime;
     const startX = this.deltaSinceStart / 3;
     const endX = startX + width;
-    this.renderer.setViewArea(
-      vec2.fromValues(startX, height),
-      vec2.fromValues(width, height)
-    );
+    renderer.setViewArea(vec2.fromValues(startX, height), vec2.fromValues(width, height));
 
-    this.renderer.autoscaleQuality(deltaTime);
-    this.overlay.innerText = prettyPrint(this.renderer.insights);
+    this.overlay.innerText = prettyPrint(renderer.insights);
 
     [
       ...this.tunnels.filter(
         (t) => startX < t.to.x + t.toRadius && t.from.x - t.fromRadius <= endX
       ),
       ...this.lights,
-    ].forEach((d) => this.renderer.addDrawable(d));
+    ].forEach((d) => renderer.addDrawable(d));
 
-    this.renderer.renderDrawables();
-  }
-
-  public destroy(): void {
-    this.renderer.destroy();
+    return currentTime < settings.sceneTimeInMilliseconds;
   }
 }

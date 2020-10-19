@@ -1,45 +1,20 @@
 import { vec2 } from 'gl-matrix';
-import { compile, Flashlight, Renderer, rgb, rgb255 } from 'sdf-2d';
+import { Flashlight, Renderer, rgb, rgb255, runAnimation } from 'sdf-2d';
 import { prettyPrint } from '../../helper/pretty-print';
 import { Random } from '../../helper/random';
+import { settings } from '../../settings';
 import { Scene } from '../scene';
 import { Metaball, MetaCircle } from './metaball';
 
 export class MetaballScene implements Scene {
   private circles: Array<Metaball> = [];
 
-  private renderer: Renderer;
   private canvas: HTMLCanvasElement;
   private overlay: HTMLDivElement;
 
-  public async initialize(
-    canvas: HTMLCanvasElement,
-    overlay: HTMLDivElement
-  ): Promise<void> {
+  public async run(canvas: HTMLCanvasElement, overlay: HTMLDivElement): Promise<void> {
     this.canvas = canvas;
     this.overlay = overlay;
-    this.renderer = await compile(canvas, [
-      {
-        ...Flashlight.descriptor,
-        shaderCombinationSteps: [0, 2],
-      },
-      {
-        ...MetaCircle.descriptor,
-        shaderCombinationSteps: [0, 1, 2, 4, 8, 12, 16],
-      },
-    ]);
-
-    this.renderer.setRuntimeSettings({
-      ambientLight: rgb(0.1, 0.1, 0.3),
-      colorPalette: [
-        rgb(1, 1, 1),
-        rgb(1, 1, 1),
-        rgb(1, 1, 1),
-        rgb(1, 1, 1),
-        rgb(1, 1, 0),
-        rgb255(186, 59, 70),
-      ],
-    });
 
     for (let i = 0; i < 16; i++) {
       this.circles.push(
@@ -55,26 +30,46 @@ export class MetaballScene implements Scene {
         )
       );
     }
+
+    await runAnimation(
+      canvas,
+      [
+        {
+          ...Flashlight.descriptor,
+          shaderCombinationSteps: [0, 2],
+        },
+        {
+          ...MetaCircle.descriptor,
+          shaderCombinationSteps: [0, 1, 2, 4, 8, 12, 16],
+        },
+      ],
+      this.drawNextFrame.bind(this),
+      {},
+      {
+        ambientLight: rgb(0.1, 0.1, 0.3),
+        enableHighDpiRendering: true,
+      }
+    );
   }
 
-  public drawNextFrame(
+  private drawNextFrame(
+    renderer: Renderer,
     currentTime: DOMHighResTimeStamp,
     deltaTime: DOMHighResTimeStamp
-  ): void {
+  ): boolean {
     const { width, height } = this.canvas.getBoundingClientRect();
     const viewAreaWidth = width / Math.max(width, height);
     const viewAreaHeight = height / Math.max(width, height);
-    this.renderer.setViewArea(
+    renderer.setViewArea(
       vec2.fromValues(0, viewAreaHeight),
       vec2.fromValues(viewAreaWidth, viewAreaHeight)
     );
-    this.renderer.autoscaleQuality(deltaTime);
 
-    this.overlay.innerText = prettyPrint(this.renderer.insights);
+    this.overlay.innerText = prettyPrint(renderer.insights);
 
     this.circles.forEach((c) => {
       c.animate(currentTime / 2000, viewAreaWidth, viewAreaHeight);
-      this.renderer.addDrawable(c.shape);
+      renderer.addDrawable(c.shape);
     });
 
     const light1 = new Flashlight(
@@ -90,13 +85,9 @@ export class MetaballScene implements Scene {
       vec2.fromValues(-1, 1)
     );
 
-    this.renderer.addDrawable(light1);
-    this.renderer.addDrawable(light2);
+    renderer.addDrawable(light1);
+    renderer.addDrawable(light2);
 
-    this.renderer.renderDrawables();
-  }
-
-  public destroy(): void {
-    this.renderer.destroy();
+    return currentTime < settings.sceneTimeInMilliseconds;
   }
 }

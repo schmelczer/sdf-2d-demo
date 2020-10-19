@@ -1,8 +1,8 @@
 import { vec2 } from 'gl-matrix';
-import { MetaCircleFactory } from 'sdf-2d';
+import { MetaCircleFactory, rgb255 } from 'sdf-2d';
 import { Random } from '../../helper/random';
 
-export const MetaCircle = MetaCircleFactory(5);
+export const MetaCircle = MetaCircleFactory(rgb255(186, 59, 70));
 
 export class Metaball {
   public shape = new MetaCircle(vec2.create(), Random.getRandomInRange(0.025, 0.075));

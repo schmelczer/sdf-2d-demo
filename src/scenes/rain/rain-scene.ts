@@ -1,6 +1,7 @@
 import { vec2 } from 'gl-matrix';
-import { CircleLight, compile, Renderer, rgb, rgb255 } from 'sdf-2d';
+import { CircleLight, Renderer, rgb, rgb255, runAnimation } from 'sdf-2d';
 import { prettyPrint } from '../../helper/pretty-print';
+import { settings } from '../../settings';
 import { Scene } from '../scene';
 import { Droplet, DropletWrapper } from './droplet';
 
@@ -9,47 +10,47 @@ export class RainScene implements Scene {
   private light1: CircleLight = new CircleLight(vec2.create(), rgb255(184, 41, 255), 2);
   private light2: CircleLight = new CircleLight(vec2.create(), rgb255(255, 31, 109), 2);
 
-  private renderer: Renderer;
   private canvas: HTMLCanvasElement;
   private overlay: HTMLDivElement;
 
-  public async initialize(
-    canvas: HTMLCanvasElement,
-    overlay: HTMLDivElement
-  ): Promise<void> {
+  public async run(canvas: HTMLCanvasElement, overlay: HTMLDivElement): Promise<void> {
     this.canvas = canvas;
     this.overlay = overlay;
-    this.renderer = await compile(canvas, [
-      {
-        ...Droplet.descriptor,
-        shaderCombinationSteps: [0, 1, 2, 4, 8, 12, 16, 24],
-      },
-      {
-        ...CircleLight.descriptor,
-        shaderCombinationSteps: [0, 2],
-      },
-    ]);
-
-    this.renderer.setRuntimeSettings({
-      ambientLight: rgb(0.2, 0.2, 0.2),
-      colorPalette: [rgb(1, 1, 1), rgb(0.3, 1, 1), rgb(1, 1, 0), rgb(0.3, 1, 1)],
-    });
-
     for (let i = 0; i < (canvas.getBoundingClientRect().width / 800) * 20; i++) {
       this.droplets.push(new DropletWrapper());
     }
+
+    await runAnimation(
+      canvas,
+      [
+        {
+          ...Droplet.descriptor,
+          shaderCombinationSteps: [0, 1, 2, 4, 8, 12, 16, 24],
+        },
+        {
+          ...CircleLight.descriptor,
+          shaderCombinationSteps: [0, 2],
+        },
+      ],
+      this.drawNextFrame.bind(this),
+      {},
+      {
+        ambientLight: rgb(0.2, 0.2, 0.2),
+        enableHighDpiRendering: true,
+      }
+    );
   }
 
-  public drawNextFrame(
+  private drawNextFrame(
+    renderer: Renderer,
     currentTime: DOMHighResTimeStamp,
     deltaTime: DOMHighResTimeStamp
-  ): void {
+  ): boolean {
     const { width, height } = this.canvas.getBoundingClientRect();
-    this.renderer.setViewArea(vec2.fromValues(0, height), vec2.fromValues(width, height));
-    this.renderer.autoscaleQuality(deltaTime);
-    this.overlay.innerText = prettyPrint(this.renderer.insights);
+    renderer.setViewArea(vec2.fromValues(0, height), vec2.fromValues(width, height));
+    this.overlay.innerText = prettyPrint(renderer.insights);
 
-    const viewAreaSize = this.renderer.viewAreaSize;
+    const viewAreaSize = renderer.viewAreaSize;
 
     vec2.set(this.light1.center, 0, viewAreaSize.y / 2);
     vec2.set(this.light2.center, viewAreaSize.x, viewAreaSize.y / 2);
@@ -57,13 +58,9 @@ export class RainScene implements Scene {
     this.droplets.forEach((d) => d.animate(currentTime, viewAreaSize));
 
     [...this.droplets.map((d) => d.drawable), this.light1, this.light2].forEach((d) =>
-      this.renderer.addDrawable(d)
+      renderer.addDrawable(d)
     );
 
-    this.renderer.renderDrawables();
-  }
-
-  public destroy(): void {
-    this.renderer.destroy();
+    return currentTime < settings.sceneTimeInMilliseconds;
   }
 }

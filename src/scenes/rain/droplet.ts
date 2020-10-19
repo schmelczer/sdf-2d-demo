@@ -1,8 +1,8 @@
 import { vec2 } from 'gl-matrix';
-import { DropletFactory } from 'sdf-2d';
+import { DropletFactory, rgb } from 'sdf-2d';
 import { Random } from '../../helper/random';
 
-export const Droplet = DropletFactory(1);
+export const Droplet = DropletFactory(rgb(0.3, 1, 1));
 export class DropletWrapper {
   public readonly drawable: InstanceType<typeof Droplet>;
 
