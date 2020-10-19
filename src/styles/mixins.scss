@@ -1,8 +1,11 @@
 @mixin card {
-  backdrop-filter: blur(16px);
-  background-color: rgba(0, 0, 0, 0.15);
   border: 2px solid white;
   border-radius: 12px;
+
+  backdrop-filter: blur(24px);
+  @supports not (backdrop-filter: blur(24px)) {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
 
   &:focus {
     outline: none;
