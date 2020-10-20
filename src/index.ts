@@ -62,19 +62,13 @@ const main = async () => {
       const currentScene = new scenes[i++ % scenes.length]();
       await currentScene.run(canvas, overlay);
 
-      const {
-        fps,
-        renderScale,
-        lightScale,
-        canvasWidth,
-        canvasHeight,
-      } = getInsightsFromRenderer(currentScene.renderer);
+      const { fps, renderScale, lightScale } = getInsightsFromRenderer(
+        currentScene.renderer
+      );
       (await sendFramePromise)({
         fps,
         renderScale,
         lightScale,
-        canvasWidth,
-        canvasHeight,
       });
     }
   } catch (e) {
