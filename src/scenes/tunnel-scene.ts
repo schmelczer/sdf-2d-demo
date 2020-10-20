@@ -24,6 +24,7 @@ export class TunnelScene implements Scene {
 
   private tunnels: Array<InstanceType<typeof InvertedTunnel>> = [];
   private lights: Array<CircleLight> = [];
+  public renderer?: Renderer;
 
   private generateTunnel() {
     const canvasSize = this.canvas.getBoundingClientRect();
@@ -116,6 +117,8 @@ export class TunnelScene implements Scene {
     currentTime: DOMHighResTimeStamp,
     deltaTime: DOMHighResTimeStamp
   ): boolean {
+    this.renderer = renderer;
+
     const { width, height } = this.canvas.getBoundingClientRect();
     this.deltaSinceStart += deltaTime;
     const startX = this.deltaSinceStart / 3;

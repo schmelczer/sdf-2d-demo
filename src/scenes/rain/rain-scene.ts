@@ -12,6 +12,7 @@ export class RainScene implements Scene {
 
   private canvas: HTMLCanvasElement;
   private overlay: HTMLDivElement;
+  public renderer?: Renderer;
 
   public async run(canvas: HTMLCanvasElement, overlay: HTMLDivElement): Promise<void> {
     this.canvas = canvas;
@@ -46,6 +47,8 @@ export class RainScene implements Scene {
     currentTime: DOMHighResTimeStamp,
     deltaTime: DOMHighResTimeStamp
   ): boolean {
+    this.renderer = renderer;
+
     const { width, height } = this.canvas.getBoundingClientRect();
     renderer.setViewArea(vec2.fromValues(0, height), vec2.fromValues(width, height));
     this.overlay.innerText = prettyPrint(renderer.insights);

@@ -1,4 +1,5 @@
 import { glMatrix } from 'gl-matrix';
+import { compile } from 'sdf-2d';
 import '../static/favicons/apple-touch-icon.png';
 import '../static/favicons/favicon-16x16.png';
 import '../static/favicons/favicon-32x32.png';
@@ -7,6 +8,8 @@ import '../static/logo-white.svg';
 import '../static/no-change/404.html';
 import '../static/no-change/robots.txt';
 import '../static/og-image.png';
+import { getInsightsFromRenderer } from './helper/get-insights-from-renderer';
+import { handleInsights } from './helper/handle-insights';
 import { removeUnnecessaryOutlines } from './helper/remove-unnecessary-outlines';
 import { BlobScene } from './scenes/blob/blob-scene';
 import { MetaballScene } from './scenes/metaball/metaball-scene';
@@ -39,13 +42,40 @@ const handleTextToggle = () => {
 toggleButton.addEventListener('click', handleTextToggle);
 handleTextToggle();
 
+const startInsightsSession = async (): Promise<(data: any) => unknown> => {
+  const { vendor, renderer } = getInsightsFromRenderer(await compile(canvas, []));
+  return await handleInsights({
+    vendor,
+    renderer,
+    referrer: document.referrer,
+    connection: (navigator as any)?.connection.effectiveType,
+    devicePixelRatio: window.devicePixelRatio,
+  });
+};
+
 const main = async () => {
+  const sendFramePromise = startInsightsSession();
+
   try {
     let i = 0;
     for (;;) {
       const currentScene = new scenes[i++ % scenes.length]();
-
       await currentScene.run(canvas, overlay);
+
+      const {
+        fps,
+        renderScale,
+        lightScale,
+        canvasWidth,
+        canvasHeight,
+      } = getInsightsFromRenderer(currentScene.renderer);
+      (await sendFramePromise)({
+        fps,
+        renderScale,
+        lightScale,
+        canvasWidth,
+        canvasHeight,
+      });
     }
   } catch (e) {
     console.error(e);
