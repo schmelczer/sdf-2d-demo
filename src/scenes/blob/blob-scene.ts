@@ -10,7 +10,7 @@ const Circle = CircleFactory(rgb255(119, 143, 120));
 export class BlobScene implements Scene {
   private canvas: HTMLCanvasElement;
   private overlay: HTMLDivElement;
-  public renderer?: Renderer;
+  public insights?: any;
 
   public async run(canvas: HTMLCanvasElement, overlay: HTMLDivElement): Promise<void> {
     this.canvas = canvas;
@@ -53,7 +53,7 @@ export class BlobScene implements Scene {
     currentTime: DOMHighResTimeStamp,
     deltaTime: DOMHighResTimeStamp
   ): boolean {
-    this.renderer = renderer;
+    this.insights = renderer.insights;
 
     const { width, height } = this.canvas.getBoundingClientRect();
     renderer.setViewArea([0, height], [width, height]);

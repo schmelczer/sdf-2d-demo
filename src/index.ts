@@ -8,7 +8,7 @@ import '../static/logo-white.svg';
 import '../static/no-change/404.html';
 import '../static/no-change/robots.txt';
 import '../static/og-image.png';
-import { getInsightsFromRenderer } from './helper/get-insights-from-renderer';
+import { extractInsights } from './helper/extract-insights';
 import { handleInsights } from './helper/handle-insights';
 import { removeUnnecessaryOutlines } from './helper/remove-unnecessary-outlines';
 import { BlobScene } from './scenes/blob/blob-scene';
@@ -43,7 +43,7 @@ toggleButton.addEventListener('click', handleTextToggle);
 handleTextToggle();
 
 const startInsightsSession = async (): Promise<(data: any) => unknown> => {
-  const { vendor, renderer } = getInsightsFromRenderer(await compile(canvas, []));
+  const { vendor, renderer } = extractInsights((await compile(canvas, [])).insights);
   return await handleInsights({
     vendor,
     renderer,
@@ -62,9 +62,7 @@ const main = async () => {
       const currentScene = new scenes[i++ % scenes.length]();
       await currentScene.run(canvas, overlay);
 
-      const { fps, renderScale, lightScale } = getInsightsFromRenderer(
-        currentScene.renderer
-      );
+      const { fps, renderScale, lightScale } = extractInsights(currentScene.insights);
       (await sendFramePromise)({
         fps,
         renderScale,
