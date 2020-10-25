@@ -48,8 +48,8 @@ const startInsightsSession = async (): Promise<(data: any) => unknown> => {
     vendor,
     renderer,
     referrer: document.referrer,
-    connection: (navigator as any)?.connection.effectiveType,
-    devicePixelRatio: window.devicePixelRatio,
+    connection: (navigator as any)?.connection?.effectiveType,
+    devicePixelRatio: devicePixelRatio,
   });
 };
 
