@@ -119,7 +119,9 @@ export class TunnelScene implements Scene {
   ): boolean {
     this.insights = renderer.insights;
 
-    const { width, height } = this.canvas.getBoundingClientRect();
+    const width = renderer.canvasSize.x;
+    const height = renderer.canvasSize.y;
+
     this.deltaSinceStart += deltaTime;
     const startX = this.deltaSinceStart / 3;
     const endX = startX + width;

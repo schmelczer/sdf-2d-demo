@@ -10,12 +10,10 @@ export class RainScene implements Scene {
   private light1: CircleLight = new CircleLight(vec2.create(), rgb255(184, 41, 255), 2);
   private light2: CircleLight = new CircleLight(vec2.create(), rgb255(255, 31, 109), 2);
 
-  private canvas: HTMLCanvasElement;
   private overlay: HTMLDivElement;
   public insights?: any;
 
   public async run(canvas: HTMLCanvasElement, overlay: HTMLDivElement): Promise<void> {
-    this.canvas = canvas;
     this.overlay = overlay;
     for (let i = 0; i < (canvas.getBoundingClientRect().width / 800) * 20; i++) {
       this.droplets.push(new DropletWrapper());
@@ -45,11 +43,13 @@ export class RainScene implements Scene {
   private drawNextFrame(
     renderer: Renderer,
     currentTime: DOMHighResTimeStamp,
-    deltaTime: DOMHighResTimeStamp
+    _: DOMHighResTimeStamp
   ): boolean {
     this.insights = renderer.insights;
 
-    const { width, height } = this.canvas.getBoundingClientRect();
+    const width = renderer.canvasSize.x;
+    const height = renderer.canvasSize.y;
+
     renderer.setViewArea(vec2.fromValues(0, height), vec2.fromValues(width, height));
     this.overlay.innerText = prettyPrint(renderer.insights);
 

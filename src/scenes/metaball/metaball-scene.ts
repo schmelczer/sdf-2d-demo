@@ -9,12 +9,10 @@ import { Metaball, MetaCircle } from './metaball';
 export class MetaballScene implements Scene {
   private circles: Array<Metaball> = [];
 
-  private canvas: HTMLCanvasElement;
   private overlay: HTMLDivElement;
   public insights?: any;
 
   public async run(canvas: HTMLCanvasElement, overlay: HTMLDivElement): Promise<void> {
-    this.canvas = canvas;
     this.overlay = overlay;
 
     for (let i = 0; i < 16; i++) {
@@ -56,11 +54,13 @@ export class MetaballScene implements Scene {
   private drawNextFrame(
     renderer: Renderer,
     currentTime: DOMHighResTimeStamp,
-    deltaTime: DOMHighResTimeStamp
+    _: DOMHighResTimeStamp
   ): boolean {
     this.insights = renderer.insights;
 
-    const { width, height } = this.canvas.getBoundingClientRect();
+    const width = renderer.canvasSize.x;
+    const height = renderer.canvasSize.y;
+
     const viewAreaWidth = width / Math.max(width, height);
     const viewAreaHeight = height / Math.max(width, height);
     renderer.setViewArea(

@@ -51,11 +51,12 @@ export class BlobScene implements Scene {
   private drawNextFrame(
     renderer: Renderer,
     currentTime: DOMHighResTimeStamp,
-    deltaTime: DOMHighResTimeStamp
+    _: DOMHighResTimeStamp
   ): boolean {
     this.insights = renderer.insights;
 
-    const { width, height } = this.canvas.getBoundingClientRect();
+    const width = renderer.canvasSize.x;
+    const height = renderer.canvasSize.y;
     renderer.setViewArea([0, height], [width, height]);
 
     this.overlay.innerText = prettyPrint(renderer.insights);

@@ -115,7 +115,7 @@ module.exports = {
         use: {
           loader: 'file-loader',
           query: {
-            outputPath: '/static',
+            outputPath: '/',
             name: '[name].[ext]',
           },
         },
