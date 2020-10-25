@@ -1,4 +1,4 @@
-import { vec2 } from 'gl-matrix';
+import { ReadonlyVec2, vec2 } from 'gl-matrix';
 import { DropletFactory, rgb } from 'sdf-2d';
 import { Random } from '../../helper/random';
 
@@ -24,7 +24,7 @@ export class DropletWrapper {
     );
   }
 
-  public animate(currentTime: number, viewAreaSize: vec2) {
+  public animate(currentTime: number, viewAreaSize: ReadonlyVec2) {
     const heightOffset = 100;
     vec2.set(
       this.drawable.from,
