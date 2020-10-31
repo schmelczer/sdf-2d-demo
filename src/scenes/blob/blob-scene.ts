@@ -32,7 +32,6 @@ export class BlobScene implements Scene {
         Blob.descriptor,
       ],
       this.drawNextFrame.bind(this),
-      {},
       {
         ambientLight: rgb255(89, 25, 115),
         enableHighDpiRendering: true,
@@ -65,6 +64,8 @@ export class BlobScene implements Scene {
 
     const q = (currentTime % 8000) / 4300;
     this.blob.animate(currentTime);
+    this.blob.position = [width / 2, -length / 4 + length / 2];
+
     [
       new Circle([width / 2, -length / 4], length / 2),
       this.blob,

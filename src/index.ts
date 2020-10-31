@@ -6,10 +6,12 @@ import '../static/favicons/favicon-32x32.png';
 import '../static/favicons/favicon.ico';
 import '../static/logo-white.svg';
 import '../static/no-change/404.html';
+import '../static/no-change/og-image.png';
 import '../static/no-change/robots.txt';
-import '../static/og-image.png';
 import { extractInsights } from './helper/extract-insights';
+import { handleFullScreen } from './helper/handle-full-screen';
 import { handleInsights } from './helper/handle-insights';
+import { Random } from './helper/random';
 import { removeUnnecessaryOutlines } from './helper/remove-unnecessary-outlines';
 import { BlobScene } from './scenes/blob/blob-scene';
 import { MetaballScene } from './scenes/metaball/metaball-scene';
@@ -18,14 +20,18 @@ import { TunnelScene } from './scenes/tunnel-scene';
 import './styles/index.scss';
 
 const scenes = [TunnelScene, MetaballScene, RainScene, BlobScene];
+Random.seed = 2;
 
 glMatrix.setMatrixArrayType(Array);
 removeUnnecessaryOutlines();
 
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+const canvasContainer = document.querySelector('#canvas-container') as HTMLCanvasElement;
 const errorText = document.querySelector('#error-text') as HTMLParamElement;
 const errorsContainer = document.querySelector('#errors-container') as HTMLDivElement;
 const toggleButton = document.querySelector('#toggle-text');
+const minimizeButton = document.querySelector('#minimize') as HTMLElement;
+const maximizeButton = document.querySelector('#maximize') as HTMLElement;
 const overlay = document.querySelector('#overlay') as HTMLDivElement;
 
 let textVisible = true;
@@ -43,18 +49,25 @@ toggleButton.addEventListener('click', handleTextToggle);
 handleTextToggle();
 
 const startInsightsSession = async (): Promise<(data: any) => unknown> => {
-  const { vendor, renderer } = extractInsights((await compile(canvas, [])).insights);
+  const dummyRenderer = await compile(document.createElement('canvas'), []);
+  const { vendor, renderer, version } = extractInsights(dummyRenderer.insights);
+  dummyRenderer.destroy();
+
   return await handleInsights({
     vendor,
     renderer,
     referrer: document.referrer,
     connection: (navigator as any)?.connection?.effectiveType,
     devicePixelRatio: devicePixelRatio,
+    height: innerHeight,
+    width: innerWidth,
+    version,
   });
 };
 
 const main = async () => {
   const sendFramePromise = startInsightsSession();
+  handleFullScreen(minimizeButton, maximizeButton, canvasContainer);
 
   try {
     let i = 0;

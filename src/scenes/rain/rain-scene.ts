@@ -7,8 +7,8 @@ import { Droplet, DropletWrapper } from './droplet';
 
 export class RainScene implements Scene {
   private droplets: Array<DropletWrapper> = [];
-  private light1: CircleLight = new CircleLight(vec2.create(), rgb255(184, 41, 255), 2);
-  private light2: CircleLight = new CircleLight(vec2.create(), rgb255(255, 31, 109), 2);
+  private light1: CircleLight = new CircleLight(vec2.create(), rgb255(184, 41, 255), 1.5);
+  private light2: CircleLight = new CircleLight(vec2.create(), rgb255(255, 31, 109), 1.5);
 
   private overlay: HTMLDivElement;
   public insights?: any;
@@ -32,8 +32,8 @@ export class RainScene implements Scene {
         },
       ],
       this.drawNextFrame.bind(this),
-      {},
       {
+        backgroundColor: rgb(0.5, 0.5, 0.5),
         ambientLight: rgb(0.2, 0.2, 0.2),
         enableHighDpiRendering: true,
       }

@@ -70,12 +70,12 @@ export class TunnelScene implements Scene {
   }
 
   public async run(canvas: HTMLCanvasElement, overlay: HTMLDivElement): Promise<void> {
-    const noiseTexture = await renderNoise([1024, 1], 15, 1);
+    const noiseTexture = await renderNoise([1024, 1], 15, 0.5);
 
     this.canvas = canvas;
     this.overlay = overlay;
 
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 30; i++) {
       this.generateTunnel();
     }
 
@@ -92,8 +92,8 @@ export class TunnelScene implements Scene {
         },
       ],
       this.drawNextFrame.bind(this),
-      { lightPenetrationRatio: 0.5 },
       {
+        lightPenetrationRatio: 0.5,
         isWorldInverted: true,
         enableHighDpiRendering: true,
         ambientLight: rgb(0.35, 0.1, 0.45),
@@ -123,7 +123,7 @@ export class TunnelScene implements Scene {
     const height = renderer.canvasSize.y;
 
     this.deltaSinceStart += deltaTime;
-    const startX = this.deltaSinceStart / 3;
+    const startX = this.deltaSinceStart / 4;
     const endX = startX + width;
     renderer.setViewArea(vec2.fromValues(startX, height), vec2.fromValues(width, height));
 

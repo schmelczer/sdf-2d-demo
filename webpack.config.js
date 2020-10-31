@@ -1,13 +1,15 @@
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const TerserJSPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TsConfigWebpackPlugin = require('ts-config-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
+const HtmlWebpackInlineSVGPlugin = require('html-webpack-inline-svg-plugin');
 const Sass = require('sass');
 
 const PATHS = {
   entryPoint: path.resolve(__dirname, 'src/index.ts'),
+  entryHtml: path.resolve(__dirname, 'src/index.html'),
   bundles: path.resolve(__dirname, 'dist'),
 };
 
@@ -17,10 +19,9 @@ module.exports = {
   },
   target: 'web',
   output: {
-    filename: '[name].[contenthash].js',
     path: PATHS.bundles,
   },
-  devtool: 'source-map',
+  //devtool: 'source-map',
   watchOptions: {
     aggregateTimeout: 600,
     ignored: /node_modules/,
@@ -29,21 +30,12 @@ module.exports = {
     host: '0.0.0.0',
     disableHostCheck: true,
   },
-  optimization: {
-    minimize: true,
-    usedExports: true,
-    minimizer: [
-      new TerserJSPlugin({
-        sourceMap: true,
-        test: /\.js$/,
-      }),
-      new OptimizeCSSAssetsPlugin({}),
-    ],
-  },
   plugins: [
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       xhtml: true,
-      template: './src/index.html',
+      template: PATHS.entryHtml,
       minify: {
         collapseWhitespace: true,
         removeComments: true,
@@ -54,11 +46,11 @@ module.exports = {
       },
       inlineSource: '.(js|css)$',
     }),
-    new HtmlWebpackInlineSourcePlugin(),
-    new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css',
-      chunkFilename: '[id].[contenthash].css',
+    new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin),
+    new HtmlWebpackInlineSVGPlugin({
+      inlineAll: true,
     }),
+    new TsConfigWebpackPlugin(),
   ],
   module: {
     rules: [
@@ -84,14 +76,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.ts$/,
-        use: {
-          loader: 'ts-loader',
-        },
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.(ico|png|jpg)$/,
+        test: /\.(ico|png)$/,
         use: {
           loader: 'file-loader',
           query: {
@@ -101,7 +86,7 @@ module.exports = {
         },
       },
       {
-        test: /no-change.*(html|txt)$/i,
+        test: /no-change.*$/i,
         use: {
           loader: 'file-loader',
           query: {

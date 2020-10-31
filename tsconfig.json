@@ -9,6 +9,8 @@
     "experimentalDecorators": true,
     "moduleResolution": "Node",
     "module": "es6",
-    "lib": ["es2016", "dom"]
-  }
+    "lib": ["es2016", "dom"],
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules"]
 }

@@ -2,8 +2,12 @@ const baseUri = 'https://insights.decla.red';
 const type = 'sdf-2d-demo';
 
 export const handleInsights = async (initialData: any): Promise<(data: any) => void> => {
-  const sessionId = await createSession(initialData);
-  return (data) => createFrame(sessionId, data);
+  try {
+    const sessionId = await createSession(initialData);
+    return (data) => createFrame(sessionId, data);
+  } catch {
+    return () => null;
+  }
 };
 
 const createSession = async (data: any): Promise<string> => {
@@ -12,8 +16,8 @@ const createSession = async (data: any): Promise<string> => {
   return sessionId;
 };
 
-const createFrame = async (sessionId: string, data: any): Promise<unknown> =>
-  await sendPostRequest(`${baseUri}/${type}/sessions/${sessionId}`, data);
+const createFrame = (sessionId: string, data: any): Promise<unknown> =>
+  sendPostRequest(`${baseUri}/${type}/sessions/${sessionId}`, data).catch();
 
 const sendPostRequest = async (uri: string, data: any): Promise<Response> =>
   await fetch(uri, {

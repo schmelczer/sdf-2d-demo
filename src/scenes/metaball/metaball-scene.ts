@@ -43,7 +43,6 @@ export class MetaballScene implements Scene {
         },
       ],
       this.drawNextFrame.bind(this),
-      {},
       {
         ambientLight: rgb(0.1, 0.1, 0.3),
         enableHighDpiRendering: true,

@@ -120,8 +120,6 @@ export class Blob extends Drawable {
         Math.sin((q > 1 ? q - 1 : 0) * Math.PI) * 10
       )
     );
-
-    this.position = this.center;
   }
 
   public minDistance(target: vec2): number {

@@ -33,20 +33,41 @@
       <h1>Javascript is required for this website.</h1>
     </noscript>
 
+    <main id="canvas-container">
+      <canvas></canvas>
+
+      <div id="errors-container">
+        <div id="errors">
+          <h1>Encountered an error</h1>
+          <p id="error-text"></p>
+        </div>
+      </div>
+
+      <img
+        src="../static/minimize.svg"
+        alt="minimize"
+        id="minimize"
+        class="full-screen-control"
+      />
+      <img
+        src="../static/maximize.svg"
+        alt="maximize"
+        id="maximize"
+        class="full-screen-control"
+      />
+    </main>
+
     <a id="info" href="https://github.com/schmelczerandras/sdf-2d" target="_BLANK">
       <p>SDF-2D</p>
-      <img width="64" height="64" src="logo-white.svg" alt="logo" />
+      <img
+        class="logo"
+        width="64"
+        height="64"
+        src="../static/logo-white.svg"
+        alt="logo"
+      />
     </a>
     <code id="overlay"></code>
     <button id="toggle-text">Loading…</button>
-
-    <canvas id="main"></canvas>
-
-    <div id="errors-container">
-      <div id="errors">
-        <h1>Encountered an error</h1>
-        <p id="error-text"></p>
-      </div>
-    </div>
   </body>
 </html>
