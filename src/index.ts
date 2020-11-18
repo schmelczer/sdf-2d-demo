@@ -49,10 +49,9 @@ const handleTextToggle = () => {
 
 const isInsidePortfolio =
   new URLSearchParams(location.search).get('portfolioView') !== null;
-if (isInsidePortfolio) {
-  toggleButton.style.visibility = 'hidden';
-  logo.style.visibility = 'hidden';
-} else {
+if (!isInsidePortfolio) {
+  toggleButton.style.visibility = 'visible';
+  logo.style.visibility = 'visible';
   toggleButton.addEventListener('click', handleTextToggle);
 }
 handleTextToggle();

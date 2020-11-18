@@ -41,7 +41,7 @@ body {
   #info {
     @include card();
     @include center-children();
-
+    visibility: hidden;
     padding: 0.25rem 0.5rem;
     text-decoration: none;
 
@@ -101,6 +101,7 @@ body {
   #toggle-text {
     bottom: 0;
     @include card();
+    visibility: hidden;
 
     font-size: 1.25rem;
     width: 150px;
