@@ -64,10 +64,10 @@ export class BlobScene implements Scene {
 
     const q = (currentTime % 8000) / 4300;
     this.blob.animate(currentTime);
-    this.blob.position = [width / 2, -length / 4 + length / 2];
+    this.blob.position = [width / 2, -length / 4 + length / 2.5];
 
     [
-      new Circle([width / 2, -length / 4], length / 2),
+      new Circle([width / 2, -length / 4], length / 2.5),
       this.blob,
       new CircleLight(
         [
