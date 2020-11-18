@@ -1,6 +1,5 @@
 @import './mixins';
 
-$bg: linear-gradient(45deg, #103783, #9bafd9);
 $breakpoint: 800px;
 
 * {
@@ -18,7 +17,7 @@ body {
 }
 
 html {
-  background: $bg;
+  background-color: #103783;
 
   @media (max-width: $breakpoint) {
     font-size: 0.7rem;
