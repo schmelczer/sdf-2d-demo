@@ -26,10 +26,11 @@ glMatrix.setMatrixArrayType(Array);
 removeUnnecessaryOutlines();
 
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+const logo = document.querySelector('#info') as HTMLElement;
 const canvasContainer = document.querySelector('#canvas-container') as HTMLCanvasElement;
 const errorText = document.querySelector('#error-text') as HTMLParamElement;
 const errorsContainer = document.querySelector('#errors-container') as HTMLDivElement;
-const toggleButton = document.querySelector('#toggle-text');
+const toggleButton = document.querySelector('#toggle-text') as HTMLElement;
 const minimizeButton = document.querySelector('#minimize') as HTMLElement;
 const maximizeButton = document.querySelector('#maximize') as HTMLElement;
 const overlay = document.querySelector('#overlay') as HTMLDivElement;
@@ -45,7 +46,15 @@ const handleTextToggle = () => {
     toggleButton.classList.add('off');
   }
 };
-toggleButton.addEventListener('click', handleTextToggle);
+
+const isInsidePortfolio =
+  new URLSearchParams(location.search).get('portfolioView') !== null;
+if (isInsidePortfolio) {
+  toggleButton.style.visibility = 'hidden';
+  logo.style.visibility = 'hidden';
+} else {
+  toggleButton.addEventListener('click', handleTextToggle);
+}
 handleTextToggle();
 
 const startInsightsSession = async (): Promise<(data: any) => unknown> => {
