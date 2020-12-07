@@ -1,11 +1,11 @@
 import { glMatrix } from 'gl-matrix';
 import { compile } from 'sdf-2d';
-import '../static/favicons/apple-touch-icon.png';
-import '../static/favicons/favicon-16x16.png';
-import '../static/favicons/favicon-32x32.png';
-import '../static/favicons/favicon.ico';
 import '../static/logo-white.svg';
 import '../static/no-change/404.html';
+import '../static/no-change/favicons/apple-touch-icon.png';
+import '../static/no-change/favicons/favicon-16x16.png';
+import '../static/no-change/favicons/favicon-32x32.png';
+import '../static/no-change/favicons/favicon.ico';
 import '../static/no-change/og-image.png';
 import '../static/no-change/robots.txt';
 import { extractInsights } from './helper/extract-insights';

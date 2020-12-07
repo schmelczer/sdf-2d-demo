@@ -76,16 +76,6 @@ module.exports = {
         ],
       },
       {
-        test: /\.(ico|png)$/,
-        use: {
-          loader: 'file-loader',
-          query: {
-            outputPath: '/',
-            name: '[name].[ext]',
-          },
-        },
-      },
-      {
         test: /no-change.*$/i,
         use: {
           loader: 'file-loader',
