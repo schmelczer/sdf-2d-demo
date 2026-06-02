@@ -1,0 +1,41 @@
+name: Check & deploy
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+  workflow_dispatch:
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: docker
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        # webpack 4 needs the legacy OpenSSL provider on Node 17+
+        run: npm run build
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
+
+      - name: Copy build to host pages mount
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          apt update && apt install -y rsync
+          rsync -a --delete --mkpath dist/ /pages/sdf2d
+          rsync -a --delete --mkpath dist/ /pages/sdf-2d
