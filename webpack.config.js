@@ -27,6 +27,11 @@ module.exports = {
   target: 'web',
   output: {
     path: PATHS.bundles,
+    // The bundle is inlined into index.html (no <script src>), so webpack 5's
+    // default publicPath:'auto' cannot derive a path from document.currentScript
+    // and throws "Automatic publicPath is not supported". A static value (assets
+    // sit next to index.html at the dist root) avoids the runtime auto-detection.
+    publicPath: '',
     clean: true,
   },
   //devtool: 'source-map',
@@ -43,6 +48,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       xhtml: true,
       template: `!!html-loader?${htmlLoaderOptions}!${PATHS.entryHtml}`,
+      // The bundle gets inlined, and `defer` is ignored on inline <script>s, so
+      // it must sit at the end of <body> (not head) to run after the DOM exists.
+      inject: 'body',
+      scriptLoading: 'blocking',
       minify: {
         collapseWhitespace: true,
         removeComments: true,
