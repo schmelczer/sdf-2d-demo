@@ -11,10 +11,7 @@ const ANALYTICS_LOGGING = process.env.NODE_ENV !== 'production';
 
 let isInitialized = false;
 
-export const track = (
-  eventName: string,
-  options: PlausibleEventOptions = {}
-) => {
+export const track = (eventName: string, options: PlausibleEventOptions = {}) => {
   try {
     plausibleTrack(eventName, options);
   } catch (error) {

@@ -1,16 +1,18 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": false,
-    "target": "es5",
-    "downlevelIteration": true,
+    "strict": false,
+    "target": "ES2017",
+    "module": "ESNext",
+    "moduleResolution": "node10",
+    "ignoreDeprecations": "6.0",
     "allowJs": true,
     "experimentalDecorators": true,
-    "moduleResolution": "Node",
-    "module": "es6",
-    "lib": ["es2016", "dom"],
+    "esModuleInterop": true,
+    "lib": ["ES2017", "DOM"],
     "skipLibCheck": true
   },
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

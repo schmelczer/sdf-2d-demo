@@ -9,7 +9,10 @@ export class Metaball {
 
   private direction = Random.getRandom() > 0.5 ? 1 : -1;
   private speed = Random.getRandomInRange(0.5, 2);
-  constructor(private readonly center: vec2, private readonly size: vec2) {}
+  constructor(
+    private readonly center: vec2,
+    private readonly size: vec2
+  ) {}
 
   public animate(currentTime: DOMHighResTimeStamp, width: number, height: number) {
     vec2.set(

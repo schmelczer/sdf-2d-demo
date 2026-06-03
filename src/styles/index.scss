@@ -1,4 +1,4 @@
-@import './mixins';
+@use './mixins' as *;
 
 $breakpoint: 800px;
 

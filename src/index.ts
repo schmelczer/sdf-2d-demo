@@ -30,7 +30,7 @@ initAnalytics();
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
 const logo = document.querySelector('#info') as HTMLElement;
 const canvasContainer = document.querySelector('#canvas-container') as HTMLCanvasElement;
-const errorText = document.querySelector('#error-text') as HTMLParamElement;
+const errorText = document.querySelector('#error-text') as HTMLParagraphElement;
 const errorsContainer = document.querySelector('#errors-container') as HTMLDivElement;
 const toggleButton = document.querySelector('#toggle-text') as HTMLElement;
 const minimizeButton = document.querySelector('#minimize') as HTMLElement;

@@ -1,17 +1,24 @@
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const TsConfigWebpackPlugin = require('ts-config-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
-const HtmlWebpackInlineSVGPlugin = require('html-webpack-inline-svg-plugin');
-const Sass = require('sass');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
+const HTMLInlineCSSWebpackPlugin =
+  require('html-inline-css-webpack-plugin').default;
 
 const PATHS = {
   entryPoint: path.resolve(__dirname, 'src/index.ts'),
   entryHtml: path.resolve(__dirname, 'src/index.html'),
   bundles: path.resolve(__dirname, 'dist'),
 };
+
+// Inline the UI SVGs referenced via <img src> into the HTML (replacing the
+// abandoned html-webpack-inline-svg-plugin). Scope html-loader to <img src> so
+// the favicon <link href> tags are left to resolve against the emitted files.
+const htmlLoaderOptions = JSON.stringify({
+  sources: { list: [{ tag: 'img', attribute: 'src', type: 'src' }] },
+  minimize: false,
+});
 
 module.exports = {
   entry: {
@@ -20,6 +27,7 @@ module.exports = {
   target: 'web',
   output: {
     path: PATHS.bundles,
+    clean: true,
   },
   //devtool: 'source-map',
   watchOptions: {
@@ -28,14 +36,13 @@ module.exports = {
   },
   devServer: {
     host: '0.0.0.0',
-    disableHostCheck: true,
+    allowedHosts: 'all',
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       xhtml: true,
-      template: PATHS.entryHtml,
+      template: `!!html-loader?${htmlLoaderOptions}!${PATHS.entryHtml}`,
       minify: {
         collapseWhitespace: true,
         removeComments: true,
@@ -44,63 +51,69 @@ module.exports = {
         removeStyleLinkTypeAttributes: true,
         useShortDoctype: true,
       },
-      inlineSource: '.(js|css)$',
     }),
-    new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin),
-    new HtmlWebpackInlineSVGPlugin({
-      inlineAll: true,
-    }),
-    new TsConfigWebpackPlugin(),
+    new HtmlInlineScriptPlugin(),
+    new HTMLInlineCSSWebpackPlugin(),
   ],
   module: {
     rules: [
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        // transpileOnly mirrors the project's prior de-facto behaviour: the old
+        // ts-config-webpack-plugin ran type-checking in a separate fork-ts-checker
+        // process that crashes on Node 22, so types were never actually enforced.
+        // (`npm run lint` still type-aware-lints; full type-checking can be
+        // re-enabled separately once the pre-existing type errors are addressed.)
+        use: {
+          loader: 'ts-loader',
+          options: { transpileOnly: true },
+        },
+      },
       {
         test: /\.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
           'postcss-loader',
-          {
-            loader: 'resolve-url-loader',
-            options: {
-              keepQuery: true,
-            },
-          },
+          // resolve-url-loader v5 always retains the query/hash (the old
+          // `keepQuery` option was removed), so no options are needed.
+          'resolve-url-loader',
           {
             loader: 'sass-loader',
             options: {
               sourceMap: true,
-              implementation: Sass,
+              implementation: require('sass'),
             },
           },
         ],
       },
       {
+        // Favicons, og-image, 404.html and robots.txt: emit verbatim to the
+        // dist root (imported for their side effect in src/index.ts).
+        // sideEffects:true keeps these bare imports from being tree-shaken away
+        // under the package's "sideEffects": ["*.scss"] declaration.
         test: /no-change.*$/i,
-        use: {
-          loader: 'file-loader',
-          query: {
-            outputPath: '/',
-            name: '[name].[ext]',
-          },
+        type: 'asset/resource',
+        sideEffects: true,
+        generator: {
+          filename: '[name][ext]',
         },
       },
       {
-        test: /\.(svg)$/,
-        use: {
-          loader: 'file-loader',
-          query: {
-            outputPath: '/',
-            name: '[name].[ext]',
-          },
-        },
+        test: /\.svg$/,
+        type: 'asset/inline',
       },
       {
         test: /\.js$/,
         enforce: 'pre',
+        exclude: /node_modules/,
         use: ['source-map-loader'],
       },
     ],
+  },
+  optimization: {
+    minimizer: ['...', new CssMinimizerPlugin()],
   },
   resolve: {
     extensions: ['.ts', '.js'],
