@@ -8,6 +8,7 @@ import '../static/no-change/favicons/favicon-32x32.png';
 import '../static/no-change/favicons/favicon.ico';
 import '../static/no-change/og-image.png';
 import '../static/no-change/robots.txt';
+import { initAnalytics } from './analytics';
 import { extractInsights } from './helper/extract-insights';
 import { handleFullScreen } from './helper/handle-full-screen';
 import { handleInsights } from './helper/handle-insights';
@@ -24,6 +25,7 @@ Random.seed = 2;
 
 glMatrix.setMatrixArrayType(Array);
 removeUnnecessaryOutlines();
+initAnalytics();
 
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
 const logo = document.querySelector('#info') as HTMLElement;

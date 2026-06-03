@@ -23,6 +23,7 @@
     "*.scss"
   ],
   "devDependencies": {
+    "@plausible-analytics/tracker": "^0.4.5",
     "@types/gl-matrix": "^2.4.5",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "@typescript-eslint/parser": "^3.10.1",
