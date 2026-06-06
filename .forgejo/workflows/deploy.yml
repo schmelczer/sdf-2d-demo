@@ -33,9 +33,16 @@ jobs:
         env:
           NODE_OPTIONS: --openssl-legacy-provider
 
-      - name: Copy build to host pages mount
+      - name: Copy build to host pages mount (sdf2d)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          apt update && apt install -y rsync
-          rsync -a --delete --mkpath dist/ /pages/sdf2d
-          rsync -a --delete --mkpath dist/ /pages/sdf-2d
+        uses: http://forgejo:3000/andras/ci-actions/deploy-pages@main
+        with:
+          source: dist
+          target: sdf2d
+
+      - name: Copy build to host pages mount (sdf-2d)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: http://forgejo:3000/andras/ci-actions/deploy-pages@main
+        with:
+          source: dist
+          target: sdf-2d
