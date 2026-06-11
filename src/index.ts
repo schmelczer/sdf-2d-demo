@@ -82,7 +82,7 @@ const main = async () => {
 
   try {
     let i = 0;
-    for (; ;) {
+    for (;;) {
       const currentScene = new scenes[i++ % scenes.length]();
       await currentScene.run(canvas, overlay);
 
