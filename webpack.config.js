@@ -20,7 +20,7 @@ const htmlLoaderOptions = JSON.stringify({
   minimize: false,
 });
 
-module.exports = {
+module.exports = (env, argv) => ({
   entry: {
     index: PATHS.entryPoint,
   },
@@ -41,6 +41,7 @@ module.exports = {
   },
   devServer: {
     host: '0.0.0.0',
+    port: 9999,
     allowedHosts: 'all',
   },
   plugins: [
@@ -61,8 +62,9 @@ module.exports = {
         useShortDoctype: true,
       },
     }),
-    new HtmlInlineScriptPlugin(),
-    new HTMLInlineCSSWebpackPlugin(),
+    ...(argv.mode === 'production'
+      ? [new HtmlInlineScriptPlugin(), new HTMLInlineCSSWebpackPlugin()]
+      : []),
   ],
   module: {
     rules: [
@@ -127,4 +129,4 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js'],
   },
-};
+});
