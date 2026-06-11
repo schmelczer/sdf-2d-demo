@@ -74,17 +74,21 @@ export class MetaballScene implements Scene {
       renderer.addDrawable(c.shape);
     });
 
+    const sweep = Math.sin(currentTime / 1500) * 0.5;
     const light1 = new Flashlight(
       vec2.fromValues(-0.05, -0.05),
       rgb255(104, 171, 212),
       0.02,
-      vec2.fromValues(1, 1)
+      vec2.fromValues(Math.cos(Math.PI / 4 + sweep), Math.sin(Math.PI / 4 + sweep))
     );
     const light2 = new Flashlight(
       vec2.fromValues(viewAreaWidth + 0.05, -0.05),
       rgb255(226, 90, 102),
       0.02,
-      vec2.fromValues(-1, 1)
+      vec2.fromValues(
+        Math.cos((Math.PI * 3) / 4 - sweep),
+        Math.sin((Math.PI * 3) / 4 - sweep)
+      )
     );
 
     renderer.addDrawable(light1);

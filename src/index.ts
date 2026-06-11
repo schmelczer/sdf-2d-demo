@@ -16,11 +16,12 @@ import { Random } from './helper/random';
 import { removeUnnecessaryOutlines } from './helper/remove-unnecessary-outlines';
 import { BlobScene } from './scenes/blob/blob-scene';
 import { MetaballScene } from './scenes/metaball/metaball-scene';
+import { OrbitScene } from './scenes/orbit/orbit-scene';
 import { RainScene } from './scenes/rain/rain-scene';
 import { TunnelScene } from './scenes/tunnel-scene';
 import './styles/index.scss';
 
-const scenes = [TunnelScene, MetaballScene, RainScene, BlobScene];
+const scenes = [TunnelScene, MetaballScene, OrbitScene, RainScene, BlobScene];
 Random.seed = 2;
 
 glMatrix.setMatrixArrayType(Array);
