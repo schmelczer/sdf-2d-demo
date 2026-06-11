@@ -21,7 +21,7 @@ import { RainScene } from './scenes/rain/rain-scene';
 import { TunnelScene } from './scenes/tunnel-scene';
 import './styles/index.scss';
 
-const scenes = [TunnelScene, MetaballScene, OrbitScene, RainScene, BlobScene];
+const scenes = [TunnelScene, MetaballScene, RainScene, RainScene, BlobScene, OrbitScene];
 Random.seed = 2;
 
 glMatrix.setMatrixArrayType(Array);
@@ -82,7 +82,7 @@ const main = async () => {
 
   try {
     let i = 0;
-    for (;;) {
+    for (; ;) {
       const currentScene = new scenes[i++ % scenes.length]();
       await currentScene.run(canvas, overlay);
 
