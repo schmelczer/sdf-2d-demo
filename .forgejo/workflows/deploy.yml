@@ -28,10 +28,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        # webpack 4 needs the legacy OpenSSL provider on Node 17+
         run: npm run build
-        env:
-          NODE_OPTIONS: --openssl-legacy-provider
 
       - name: Copy build to host pages mount (sdf2d)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
