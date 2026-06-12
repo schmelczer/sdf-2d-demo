@@ -21,7 +21,7 @@ import { RainScene } from './scenes/rain/rain-scene';
 import { TunnelScene } from './scenes/tunnel-scene';
 import './styles/index.scss';
 
-const scenes = [TunnelScene, MetaballScene, RainScene, RainScene, BlobScene, OrbitScene];
+const scenes = [TunnelScene, MetaballScene, RainScene, BlobScene, OrbitScene];
 Random.seed = 2;
 
 glMatrix.setMatrixArrayType(Array);
