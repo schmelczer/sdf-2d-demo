@@ -3,6 +3,6 @@
   SDF-2D demo
 </h1>
 
-![Deploy everything](https://github.com/schmelczerandras/sdf-2d-demo/workflows/Deploy%20everything/badge.svg)
+[![Check & deploy](https://git.schmelczer.dev/andras/sdf-2d-demo/badges/workflows/deploy.yml/badge.svg?branch=main)](https://git.schmelczer.dev/andras/sdf-2d-demo/actions?workflow=deploy.yml)
 
 Some simple demos to showcase the possibilities of this library.
